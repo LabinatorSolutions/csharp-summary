@@ -6,11 +6,19 @@
 <style>
 /* ============================================================
    TechWorld with Milan — one-page C# cheat sheet
-   Brand: assets/brand.css design language — dark navy header and
-   footer bands, lavender-gray paper body, white cards with 1.5px
-   ink borders, solid ink panel header bars, dashed dividers,
-   purple as the only accent, radius scale 10 / 6 / 3,
-   no drop shadows anywhere, no emoji.
+   Covers C# 14 / .NET 10 only. No preview-language material.
+
+   Brand: assets/brand.css design language — dark navy header band,
+   lavender-gray paper body, white cards with 1.5px ink borders,
+   solid ink panel header bars, dashed dividers, purple as the only
+   accent, radius scale 10 / 6 / 3, no drop shadows, no emoji.
+
+   Row model: every panel body is a two-column grid. The code cell is
+   a fixed 58% of the panel's inner width, the plain-language note
+   takes the rest and is top-aligned, so all notes in a panel line up.
+   Code is 14px monospace, indented with real 4-space steps and
+   Allman braces; nothing is aligned with padding spaces.
+
    Fonts are referenced by absolute path OUTSIDE this repository.
    Druk Wide is commercially licensed and is never copied in.
    ============================================================ */
@@ -50,12 +58,19 @@ body {
   font-family: 'Artegra Sans', 'Segoe UI', sans-serif;
   background: var(--paper);
   color: var(--ink);
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
 }
 
-.canvas { width: 1600px; display: flex; flex-direction: column; position: relative; overflow: hidden; }
+.canvas {
+  width: 1600px;
+  background: var(--paper);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
 
 /* Faint ink hex line pattern over the paper — print texture, barely there */
 .hexes {
@@ -65,12 +80,12 @@ body {
   opacity: 0.05;
 }
 
-/* ---------------- Header: navy band ---------------- */
+/* ---------------- Header: the one navy band ---------------- */
 header {
   position: relative;
   background: var(--ink);
   color: var(--frame-text);
-  padding: 26px 46px 24px;
+  padding: 32px 38px 30px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -79,19 +94,19 @@ header {
 header::before {
   content: '';
   position: absolute; top: 0; right: 0;
-  width: 700px; height: 100%;
+  width: 720px; height: 100%;
   pointer-events: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='460' height='240' viewBox='0 0 460 240'%3E%3Cg fill='none' stroke='%238755FF' stroke-width='1.6'%3E%3Cpath d='M300 10 L356 42 L356 106 L300 138 L244 106 L244 42 Z'/%3E%3Cpath d='M412 74 L468 106 L468 170 L412 202 L356 170 L356 106 Z'/%3E%3Cpath d='M300 138 L356 170 L356 234 L300 266 L244 234 L244 170 Z' opacity='0.5'/%3E%3Ccircle cx='356' cy='106' r='4' fill='%238755FF'/%3E%3Ccircle cx='356' cy='170' r='4' fill='%238755FF'/%3E%3Ccircle cx='300' cy='138' r='4' fill='%238755FF'/%3E%3Cpath d='M244 106 L188 138' opacity='0.6'/%3E%3Ccircle cx='188' cy='138' r='3.5' fill='%238755FF' opacity='0.7'/%3E%3C/g%3E%3C/svg%3E");
   background-repeat: no-repeat;
-  background-position: right 250px top -14px;
+  background-position: right 210px top -10px;
   opacity: 0.2;
-  -webkit-mask-image: linear-gradient(100deg, transparent 15%, #000 55%);
-  mask-image: linear-gradient(100deg, transparent 15%, #000 55%);
+  -webkit-mask-image: linear-gradient(100deg, transparent 12%, #000 52%);
+  mask-image: linear-gradient(100deg, transparent 12%, #000 52%);
 }
 .head-left { position: relative; }
 .kicker {
   font-family: 'Druk Wide';
-  font-size: 13px;
+  font-size: 14px;
   letter-spacing: 3.4px;
   text-transform: uppercase;
   color: var(--lav);
@@ -106,18 +121,29 @@ h1 {
 h1 .hl { color: var(--purple); }
 .sub {
   margin-top: 10px;
-  font-size: 15px;
-  line-height: 1.45;
+  font-size: 16px;
+  line-height: 1.4;
   color: var(--frame-muted);
 }
 .sub b { color: var(--lav); font-weight: 700; }
-.head-logo { position: relative; width: 250px; flex: none; }
-.head-logo img { width: 100%; display: block; }
+.urls {
+  margin-top: 7px;
+  font-size: 15px;
+  line-height: 1.4;
+  color: var(--lav);
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+.urls span { color: var(--frame-muted); font-weight: 400; }
+/* Milan's full logo, white variant, placed as-is — matched to the height
+   of the text block beside it, right-aligned on the header padding. */
+.head-logo { position: relative; flex: none; display: flex; align-items: center; }
+.head-logo img { height: 124px; width: auto; display: block; }
 
-/* ---------------- Main: the paper body ---------------- */
-main { position: relative; padding: 18px 46px 22px; }
-.cols { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; align-items: start; }
-.col { display: flex; flex-direction: column; gap: 12px; }
+/* ---------------- Main: the paper body, no footer band ---------------- */
+main { position: relative; padding: 34px 38px 38px; }
+.cols { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 32px; align-items: start; }
+.col { display: flex; flex-direction: column; gap: 28px; }
 
 /* ---------------- Panels ---------------- */
 .p {
@@ -128,81 +154,50 @@ main { position: relative; padding: 18px 46px 22px; }
 }
 .p > h2 {
   font-family: 'Druk Wide';
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 400;
   letter-spacing: 0.3px;
   background: var(--ink);
   color: var(--frame-text);
-  padding: 7px 13px 6px;
+  padding: 13px 22px 11px;
 }
-.b { padding: 3px 12px 5px; }
+.b { padding: 10px 22px 14px; }
 
-/* A row flows inline: code chip first, plain-language note after it.
-   Short pairs sit on one line; long ones wrap to a second line. */
+/* One row = one code cell + one note cell, both top-aligned. */
 .r {
-  padding: 3px 0 3px;
+  display: grid;
+  grid-template-columns: 58% 1fr;
+  gap: 12px;
+  align-items: start;
+  padding: 7px 0;
   border-bottom: 1px dashed var(--dash);
-  line-height: 1.3;
 }
-.r:last-child { border-bottom: none; }
-.r > code, .r > pre {
+.r:last-child { border-bottom: none; padding-bottom: 2px; }
+.r > pre {
   font-family: var(--mono);
-  font-size: 13px;
+  font-size: 14px;
+  line-height: 1.42;
   color: var(--ink);
   background: var(--card-tint);
   border-radius: 3px;
-  padding: 1px 5px;
+  padding: 5px 7px;
   white-space: pre;
+  tab-size: 4;
 }
-.r > code { display: inline; }
-.r > pre { display: block; padding: 3px 6px; line-height: 1.32; margin-bottom: 2px; }
-.r > .d { font-size: 14px; color: var(--ink-soft); }
-.r > pre + .d { display: block; line-height: 1.28; }
-.d k { font-family: var(--mono); font-size: 13px; color: var(--ink); font-style: normal; }
+.r > .d {
+  font-size: 15px;
+  line-height: 1.34;
+  color: var(--ink-soft);
+  padding-top: 5px;
+}
+.d k { font-family: var(--mono); font-size: 14px; color: var(--ink); font-style: normal; }
 .d v { color: var(--purple-deep); font-weight: 700; font-style: normal; white-space: nowrap; }
 .cmt { color: #8A93A8; }
 
 /* Accent panel: New in C# 14 */
 .p.acc { border-color: var(--purple-deep); }
 .p.acc > h2 { background: var(--purple); }
-.p.acc .r > code, .p.acc .r > pre { background: rgba(135, 85, 255, 0.10); }
-
-/* Dark strip: C# 15 preview */
-.p.dark { background: var(--ink); border-color: var(--ink); }
-.p.dark > h2 { background: var(--purple-deep); }
-.p.dark .r { border-bottom-color: rgba(242, 244, 250, 0.2); }
-.p.dark .r > code, .p.dark .r > pre { background: rgba(242, 244, 250, 0.08); color: var(--lav); }
-.p.dark .r > .d { color: var(--frame-muted); }
-.p.dark .d k { color: var(--lav); }
-.p.dark .d v { color: var(--lav); }
-.p.dark .note {
-  font-size: 14px;
-  line-height: 1.28;
-  color: var(--frame-muted);
-  border-top: 1px dashed rgba(242, 244, 250, 0.2);
-  padding-top: 6px;
-  margin-top: 5px;
-}
-.p.dark .note k { color: var(--lav); }
-
-/* ---------------- Footer: navy band ---------------- */
-footer {
-  position: relative;
-  background: var(--ink);
-  color: var(--frame-text);
-  padding: 18px 46px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 30px;
-}
-.f-left { display: flex; align-items: center; gap: 16px; }
-.f-icon { width: 34px; display: block; flex: none; }
-.f-links { font-size: 15px; color: var(--lav); font-weight: 700; letter-spacing: 0.2px; }
-.f-links span { color: var(--frame-muted); font-weight: 400; }
-.f-right { display: flex; align-items: center; gap: 24px; }
-.f-ed { font-size: 14px; color: var(--frame-muted); text-align: right; }
-.f-logo { width: 132px; display: block; flex: none; }
+.p.acc .r > pre { background: rgba(135, 85, 255, 0.10); }
 </style>
 </head>
 <body>
@@ -213,7 +208,8 @@ footer {
     <div class="head-left">
       <div class="kicker">Quick reference</div>
       <h1>C<span class="hl">#</span> Cheat Sheet</h1>
-      <div class="sub">2026 edition &middot; <b>C# 14 / .NET 10</b>, with <b>C# 15 preview</b> &nbsp;&middot;&nbsp; every version-dependent line is labeled</div>
+      <div class="sub"><b>2026 edition &middot; C# 14 / .NET 10</b> &nbsp;&middot;&nbsp; every version-dependent line is labelled</div>
+      <div class="urls">techworld-with-milan.com &nbsp;<span>&middot;</span>&nbsp; newsletter.techworld-with-milan.com &nbsp;<span>&middot;</span>&nbsp; github.com/milanm/csharp-cheatsheet</div>
     </div>
     <div class="head-logo"><img src="file:///root/.claude/skills/synced/acb76ae3-784c-4c86-bd03-ce5b0aa44400_a3c0c1ef-f73b-4513-be5f-7c3d17c6f5dd/techworld-infographics/assets/logos/logo-white.png" alt="TechWorld with Milan"></div>
   </header>
@@ -227,96 +223,108 @@ footer {
     <section class="p">
       <h2>1 &nbsp;Types &amp; literals</h2>
       <div class="b">
-        <div class="r"><code>int i = 42;  long n = 9_000L;</code> <span class="d"><k>_</k> is a digit separator</span></div>
-        <div class="r"><code>byte b = 255;  short s = -32768;</code> <span class="d">8- and 16-bit</span></div>
-        <div class="r"><code>double d = 3.14;  float f = 3.14f;</code> <span class="d">binary floating point</span></div>
-        <div class="r"><code>decimal m = 19.99m;</code> <span class="d">exact, use it for money</span></div>
-        <div class="r"><code>bool ok = true;  char c = 'A';</code> <span class="d">one UTF-16 unit</span></div>
-        <div class="r"><code>int h = 0x2A;  int b = 0b101010;</code> <span class="d">hex and binary, both 42</span></div>
-        <div class="r"><code>var x = new List&lt;int&gt;();</code> <span class="d">type inferred at compile time</span></div>
-        <div class="r"><code>int n = default;  nint p = 42;</code> <span class="d">zero value; native-size</span></div>
-        <div class="r"><code>const double Pi = 3.14159;</code> <span class="d">compile-time constant</span></div>
-        <div class="r"><code>readonly DateTime _t = DateTime.Now;</code> <span class="d">set once, in a ctor</span></div>
-        <div class="r"><code>public required string Name { get; init; }</code> <span class="d">caller must set it &middot; <v>C# 11</v></span></div>
+        <div class="r"><pre>int i = 42;</pre><div class="d">32-bit integer</div></div>
+        <div class="r"><pre>long n = 9_000_000L;</pre><div class="d"><k>_</k> is a digit separator</div></div>
+        <div class="r"><pre>double d = 3.14;</pre><div class="d">binary floating point</div></div>
+        <div class="r"><pre>decimal m = 19.99m;</pre><div class="d">exact — the type for money</div></div>
+        <div class="r"><pre>bool ok = true;</pre><div class="d">true or false</div></div>
+        <div class="r"><pre>char c = 'A';</pre><div class="d">one UTF-16 unit</div></div>
+        <div class="r"><pre>int h = 0x2A;</pre><div class="d">hex literal, 42</div></div>
+        <div class="r"><pre>int b = 0b101010;</pre><div class="d">binary literal, 42</div></div>
+        <div class="r"><pre>var x = new List&lt;int&gt;();</pre><div class="d">inferred at compile time</div></div>
+        <div class="r"><pre>int n = default;</pre><div class="d">0, null or a zeroed struct</div></div>
+        <div class="r"><pre>nint p = 42;</pre><div class="d">native-sized integer</div></div>
+        <div class="r"><pre>const double Pi = 3.14159;</pre><div class="d">compile-time constant</div></div>
+        <div class="r"><pre>readonly DateTime _t;</pre><div class="d">assignable only in a ctor</div></div>
+        <div class="r"><pre>public required string Name
+{ get; init; }</pre><div class="d">the initializer must set it &middot; <v>C# 11</v></div></div>
       </div>
     </section>
 
     <section class="p">
       <h2>2 &nbsp;Strings</h2>
       <div class="b">
-        <div class="r"><code>$"{greeting} {name}!"</code> <span class="d">interpolation &middot; <v>C# 6</v></span></div>
-        <div class="r"><code>@"C:\Users\Docs"</code> <span class="d">verbatim: escapes off, newlines kept</span></div>
-        <div class="r"><code>"""{ "a": 1 }"""</code> <span class="d">raw literal, no escaping &middot; <v>C# 11</v></span></div>
-        <div class="r"><code>$$"""{ "n": "{{x}}" }"""</code> <span class="d"><k>{{ }}</k> is the hole &middot; <v>C# 11</v></span></div>
-        <div class="r"><code>ReadOnlySpan&lt;byte&gt; u = "Hi"u8;</code> <span class="d">UTF-8 literal &middot; <v>C# 11</v></span></div>
-        <div class="r"><code>"\e[31mError\e[0m"</code> <span class="d"><k>\e</k> is the ESC escape &middot; <v>C# 13</v></span></div>
-        <div class="r"><code>sb.Append($"Item {i}, ");</code> <span class="d"><k>StringBuilder</k> in loops</span></div>
-        <div class="r"><code>StringComparison.Ordinal</code> <span class="d">always pick a comparison</span></div>
-        <div class="r"><code>text.Split(',')</code> &middot; <code>text.Trim()</code> <span class="d">common helpers</span></div>
-        <div class="r"><code>string.IsNullOrEmpty(s)</code> <span class="d">null or zero length</span></div>
+        <div class="r"><pre>$"{greeting} {name}!"</pre><div class="d">interpolation &middot; <v>C# 6</v></div></div>
+        <div class="r"><pre>@"C:\Users\Docs"</pre><div class="d">verbatim: escapes off</div></div>
+        <div class="r"><pre>"""{ "a": 1 }"""</pre><div class="d">raw literal, no escaping &middot; <v>C# 11</v></div></div>
+        <div class="r"><pre>$$"""{ "n": "{{x}}" }"""</pre><div class="d"><k>$$</k> makes <k>{{ }}</k> the hole &middot; <v>C# 11</v></div></div>
+        <div class="r"><pre>var u8 = "Hi"u8;</pre><div class="d">UTF-8 literal, typed <k>ReadOnlySpan&lt;byte&gt;</k> &middot; <v>C# 11</v></div></div>
+        <div class="r"><pre>"\e[31mError\e[0m"</pre><div class="d"><k>\e</k> is the ESC escape &middot; <v>C# 13</v></div></div>
+        <div class="r"><pre>sb.Append($"Item {i}, ");</pre><div class="d"><k>StringBuilder</k> for loops</div></div>
+        <div class="r"><pre>StringComparison.Ordinal</pre><div class="d">always pick a comparison</div></div>
+        <div class="r"><pre>string.IsNullOrEmpty(s)</pre><div class="d">null or zero length</div></div>
       </div>
     </section>
 
     <section class="p">
       <h2>3 &nbsp;Null handling</h2>
       <div class="b">
-        <div class="r"><code>int? age;  string? name;</code> <span class="d">nullable value / reference</span></div>
-        <div class="r"><code>customer?.Name?.Length</code> <span class="d">whole chain short-circuits</span></div>
-        <div class="r"><code>userName ?? "Anonymous"</code> <span class="d">fallback when null</span></div>
-        <div class="r"><code>userName ??= "Anonymous";</code> <span class="d">assign only if null &middot; <v>C# 8</v></span></div>
-        <div class="r"><code>x is null</code> &middot; <code>x is not null</code> <span class="d">ignores overloaded <k>==</k></span></div>
-        <div class="r"><code>customer?.Order = GetOrder();</code> <span class="d">only if non-null &middot; <v>C# 14</v></span></div>
-        <div class="r"><code>customer?.Balance += 10;</code> <span class="d">compound, not <k>++</k> &middot; <v>C# 14</v></span></div>
+        <div class="r"><pre>int? age = null;</pre><div class="d">nullable value type</div></div>
+        <div class="r"><pre>string? name = null;</pre><div class="d">nullable reference type</div></div>
+        <div class="r"><pre>customer?.Name?.Length</pre><div class="d">the chain short-circuits</div></div>
+        <div class="r"><pre>userName ?? "Anonymous"</pre><div class="d">fallback when null</div></div>
+        <div class="r"><pre>userName ??= "Anonymous";</pre><div class="d">assign only if null &middot; <v>C# 8</v></div></div>
+        <div class="r"><pre>x is null</pre><div class="d">null test as a pattern</div></div>
+        <div class="r"><pre>x is not null</pre><div class="d">ignores an overloaded <k>==</k></div></div>
+        <div class="r"><pre>customer?.Order = order;</pre><div class="d">right side runs only if non-null &middot; <v>C# 14</v></div></div>
+        <div class="r"><pre>customer?.Balance += 10;</pre><div class="d">compound too, not <k>++</k> &middot; <v>C# 14</v></div></div>
       </div>
     </section>
 
     <section class="p">
       <h2>4 &nbsp;Control flow</h2>
       <div class="b">
-        <div class="r"><code>if (a) X(); else if (b) Y(); else Z();</code> <span class="d">if / else chain</span></div>
-        <div class="r"><code>age &gt;= 18 ? "Adult" : "Minor"</code> <span class="d">ternary conditional</span></div>
-        <div class="r blk"><pre>switch (day)
+        <div class="r"><pre>if (a) X(); else Y();</pre><div class="d">two-way branch</div></div>
+        <div class="r"><pre>else if (b) Z();</pre><div class="d">chain more conditions</div></div>
+        <div class="r"><pre>age &gt;= 18 ? "Adult" : "Kid"</pre><div class="d">ternary conditional</div></div>
+        <div class="r"><pre>switch (day)
 {
-    case DayOfWeek.Sunday: Weekend(); break;
-    default: Weekday(); break;
-}</pre><span class="d">every section needs <k>break</k> or <k>return</k></span></div>
-        <div class="r blk"><pre>string Kind(object x) =&gt; x switch
-{
-    Circle c when c.Radius &gt; 10 =&gt; "Big circle",
-    Rectangle { Width: 0 }      =&gt; "Line",
-    null                        =&gt; "No shape",
-    _                           =&gt; "Other"
-};</pre><span class="d">switch expression: patterns and a <k>when</k> guard &middot; <v>C# 8</v></span></div>
+    case DayOfWeek.Sunday:
+        Weekend();
+        break;
+    default:
+        Weekday();
+        break;
+}</pre><div class="d">every section ends with <k>break</k> or <k>return</k></div></div>
+        <div class="r"><pre>string Kind(object x) =&gt;
+    x switch
+    {
+        Circle => "Circle",
+        null => "No shape",
+        _ => "Other"
+    };</pre><div class="d">switch expression &middot; <v>C# 8</v></div></div>
+        <div class="r"><pre>Circle c when c.R &gt; 10</pre><div class="d"><k>when</k> guards one arm</div></div>
       </div>
     </section>
 
     <section class="p">
       <h2>5 &nbsp;Loops</h2>
       <div class="b">
-        <div class="r"><code>for (int i = 0; i &lt; 10; i++)</code> <span class="d">known iteration count</span></div>
-        <div class="r"><code>foreach (string n in names)</code> <span class="d">any <k>IEnumerable</k></span></div>
-        <div class="r"><code>foreach (var (i, n) in xs.Index())</code> <span class="d">index + item &middot; <v>.NET 9</v></span></div>
-        <div class="r"><code>foreach (var (k, v) in dict)</code> <span class="d">deconstructs &middot; <v>C# 7</v></span></div>
-        <div class="r"><code>while (c) { }</code> &middot; <code>do { } while (c);</code> <span class="d">zero times / at least once</span></div>
-        <div class="r"><code>continue;</code> &middot; <code>break;</code> <span class="d">next iteration / leave loop</span></div>
-        <div class="r"><code>yield return item;</code> <span class="d">lazy iterator method</span></div>
-        <div class="r blk"><pre>outer: for (int r = 0; r &lt; h; r++)
-    for (int c = 0; c &lt; w; c++)
-        if (grid[r, c].IsGoal) break outer;</pre><span class="d">labeled <k>break</k> / <k>continue</k> &middot; <v>C# 15 preview</v></span></div>
+        <div class="r"><pre>for (int i = 0; i &lt; 10; i++)</pre><div class="d">known iteration count</div></div>
+        <div class="r"><pre>foreach (string n in names)</pre><div class="d">any <k>IEnumerable</k></div></div>
+        <div class="r"><pre>names.Index()</pre><div class="d">(index, item) tuples &middot; <v>.NET 9</v></div></div>
+        <div class="r"><pre>foreach (var (k, v) in dict)</pre><div class="d">deconstruct as you go &middot; <v>C# 7</v></div></div>
+        <div class="r"><pre>while (cond) { }</pre><div class="d">may run zero times</div></div>
+        <div class="r"><pre>do { } while (cond);</pre><div class="d">runs at least once</div></div>
+        <div class="r"><pre>continue;</pre><div class="d">skip to next iteration</div></div>
+        <div class="r"><pre>break;</pre><div class="d">leave the loop</div></div>
+        <div class="r"><pre>yield return item;</pre><div class="d">lazy iterator method</div></div>
       </div>
     </section>
 
     <section class="p">
       <h2>6 &nbsp;Pattern matching</h2>
       <div class="b">
-        <div class="r"><code>value is string text</code> <span class="d">type pattern + declaration</span></div>
-        <div class="r"><code>p is { Name: "Alice", Age: &gt;= 30 }</code> <span class="d">property pattern</span></div>
-        <div class="r"><code>o is { Customer: { Name: "A" } }</code> <span class="d">nested property pattern</span></div>
-        <div class="r"><code>x is &gt; 20 and &lt; 30</code> &middot; <code>x is not null</code> <span class="d"><k>and</k>/<k>or</k>/<k>not</k> &middot; <v>C# 9</v></span></div>
-        <div class="r"><code>(x, y) is (&gt; 0, &gt; 0)</code> <span class="d">tuple pattern</span></div>
-        <div class="r"><code>shape is Circle(var radius)</code> <span class="d">positional, on a record</span></div>
-        <div class="r"><code>arr is [var a, .., var z]</code> &middot; <code>[&gt; 0, ..]</code> <span class="d">list pattern &middot; <v>C# 11</v></span></div>
-        <div class="r"><code>var (name, _) = person;</code> <span class="d"><k>var</k> binds, <k>_</k> discards</span></div>
+        <div class="r"><pre>value is string text</pre><div class="d">type pattern, binds <k>text</k></div></div>
+        <div class="r"><pre>p is { Age: &gt;= 30 }</pre><div class="d">property pattern</div></div>
+        <div class="r"><pre>o is { Cust: { Name: "A" } }</pre><div class="d">nested property pattern</div></div>
+        <div class="r"><pre>x is &gt; 20 and &lt; 30</pre><div class="d"><k>and</k> combinator &middot; <v>C# 9</v></div></div>
+        <div class="r"><pre>s is "a" or "b"</pre><div class="d"><k>or</k> and <k>not</k> too &middot; <v>C# 9</v></div></div>
+        <div class="r"><pre>(x, y) is (&gt; 0, &gt; 0)</pre><div class="d">tuple pattern</div></div>
+        <div class="r"><pre>shape is Circle(var r)</pre><div class="d">positional, on a record</div></div>
+        <div class="r"><pre>arr is [var a, .., var z]</pre><div class="d">list pattern with a slice &middot; <v>C# 11</v></div></div>
+        <div class="r"><pre>arr is [&gt; 0, &gt; 0, ..]</pre><div class="d">first two positive</div></div>
+        <div class="r"><pre>var (name, _) = person;</pre><div class="d"><k>_</k> discards a value</div></div>
       </div>
     </section>
 
@@ -326,91 +334,134 @@ footer {
   <div class="col">
 
     <section class="p">
-      <h2>7 &nbsp;Methods, parameters &amp; lambdas</h2>
+      <h2>7 &nbsp;Methods &amp; parameters</h2>
       <div class="b">
-        <div class="r"><code>public int Add(int a, int b) =&gt; a + b;</code> <span class="d">expression-bodied</span></div>
-        <div class="r"><code>void Greet(string n, string hi = "Hi")</code> <span class="d">optional parameter</span></div>
-        <div class="r"><code>Greet(hi: "Yo", n: "Al");</code> <span class="d">named arguments, any order</span></div>
-        <div class="r"><code>void Swap(ref int a, ref int b)</code> <span class="d">caller sees the change</span></div>
-        <div class="r"><code>bool Try(string s, out int result)</code> <span class="d">assign before return</span></div>
-        <div class="r"><code>double D(in Point a, in Point b)</code> <span class="d">read-only ref &middot; <v>C# 7.2</v></span></div>
-        <div class="r"><code>double L(ref readonly Vector3 v)</code> <span class="d">wants a variable &middot; <v>C# 12</v></span></div>
-        <div class="r"><code>int Sum(params int[] numbers)</code> <span class="d">variable-length args</span></div>
-        <div class="r"><code>params ReadOnlySpan&lt;int&gt; n</code> <span class="d">no array alloc &middot; <v>C# 13</v></span></div>
-        <div class="r blk"><pre>int Factorial(int n) {
-    int Calc(int x) =&gt; x &lt;= 1 ? 1 : x * Calc(x - 1);
-    return Calc(n); }</pre><span class="d">local function, scoped to one method &middot; <v>C# 7</v></span></div>
-        <div class="r"><code>Func&lt;int,int,int&gt; f = (a, b) =&gt; a + b;</code> <span class="d">lambda into a delegate</span></div>
-        <div class="r"><code>(x, y = 10) =&gt; x + y</code> <span class="d">default lambda param &middot; <v>C# 12</v></span></div>
+        <div class="r"><pre>public int Add(int a, int b)
+    =&gt; a + b;</pre><div class="d">expression-bodied &middot; <v>C# 6</v></div></div>
+        <div class="r"><pre>void Greet(string hi = "Hi")</pre><div class="d">optional parameter</div></div>
+        <div class="r"><pre>Greet(hi: "Yo");</pre><div class="d">named argument</div></div>
+        <div class="r"><pre>void Bump(ref int n)</pre><div class="d">caller sees the change</div></div>
+        <div class="r"><pre>bool Try(out int result)</pre><div class="d">assign before returning</div></div>
+        <div class="r"><pre>double D(in Point p)</pre><div class="d">read-only reference &middot; <v>C# 7.2</v></div></div>
+        <div class="r"><pre>void L(ref readonly Vec3 v)</pre><div class="d">caller passes a variable &middot; <v>C# 12</v></div></div>
+        <div class="r"><pre>int Sum(params int[] n)</pre><div class="d">variable-length args</div></div>
+        <div class="r"><pre>params ReadOnlySpan&lt;int&gt; n</pre><div class="d">over spans, no array alloc &middot; <v>C# 13</v></div></div>
       </div>
     </section>
 
     <section class="p">
-      <h2>8 &nbsp;Classes, records &amp; structs</h2>
+      <h2>8 &nbsp;Lambdas &amp; local functions</h2>
       <div class="b">
-        <div class="r"><code>public string Name { get; set; }</code> <span class="d">auto property</span></div>
-        <div class="r"><code>public bool IsAdult =&gt; Age &gt;= 18;</code> <span class="d">computed property</span></div>
-        <div class="r"><code>public string Id { get; init; }</code> <span class="d">init-only &middot; <v>C# 9</v></span></div>
-        <div class="r"><code>class Person(string name, int age)</code> <span class="d">primary ctor &middot; <v>C# 12</v></span></div>
-        <div class="r"><code>record Person(string F, int Age);</code> <span class="d">value equality &middot; <v>C# 9</v></span></div>
-        <div class="r"><code>person with { Age = 31 }</code> <span class="d">copy with changes</span></div>
-        <div class="r"><code>record struct Point(double X);</code> <span class="d">value-type record &middot; <v>C# 10</v></span></div>
-        <div class="r"><code>readonly record struct Rgb(byte R);</code> <span class="d">members are <k>get</k>/<k>init</k></span></div>
-        <div class="r"><code>sealed class Cache { }</code> <span class="d">no further inheritance</span></div>
-        <div class="r"><code>abstract class</code> &middot; <code>static class</code> <span class="d">must derive / no instances</span></div>
+        <div class="r"><pre>int Outer(int n)
+{
+    int Twice(int x)
+        =&gt; x * 2;
+    return Twice(n);
+}</pre><div class="d">local function &middot; <v>C# 7</v></div></div>
+        <div class="r"><pre>Func&lt;int, int&gt; f = x =&gt; x;</pre><div class="d">lambda into a delegate</div></div>
+        <div class="r"><pre>Action&lt;string&gt; log = Write;</pre><div class="d"><k>Action</k> returns void</div></div>
+        <div class="r"><pre>(x, y = 10) =&gt; x + y</pre><div class="d">default lambda parameter &middot; <v>C# 12</v></div></div>
       </div>
     </section>
 
     <section class="p">
       <h2>9 &nbsp;Interfaces &amp; generics</h2>
       <div class="b">
-        <div class="r blk"><pre>public interface ILogger
+        <div class="r"><pre>public interface ILogger
 {
-    void Log(string message);
-    void LogError(string m) =&gt; Log($"ERROR: {m}");
-}</pre><span class="d">default interface implementation &middot; <v>C# 8</v></span></div>
-        <div class="r blk"><pre>where T : struct   <span class="cmt">// value</span>    where T : class  <span class="cmt">// ref</span>
-where T : notnull  <span class="cmt">// never null</span>
-where T : new()    <span class="cmt">// ctor, must be last</span></pre><span class="d">constraints stack per type parameter</span></div>
-        <div class="r"><code>where T : allows ref struct</code> <span class="d"><k>T</k> can be <k>Span&lt;T&gt;</k> &middot; <v>C# 13</v></span></div>
-        <div class="r blk"><pre>static T Sum&lt;T&gt;(IEnumerable&lt;T&gt; v) where T : INumber&lt;T&gt;
-    =&gt; v.Aggregate(T.Zero, (a, b) =&gt; a + b);</pre><span class="d">generic math over any numeric type &middot; <v>C# 11</v></span></div>
-        <div class="r"><code>static abstract TSelf Create();</code> <span class="d">on an interface &middot; <v>C# 11</v></span></div>
+    void Log(string msg);
+    void LogError(string m)
+        =&gt; Log($"! {m}");
+}</pre><div class="d">default interface implementation &middot; <v>C# 8</v></div></div>
+        <div class="r"><pre>class Repo&lt;T&gt; where T : Emp</pre><div class="d">generic constraint</div></div>
+        <div class="r"><pre>where T : struct</pre><div class="d">non-nullable value type</div></div>
+        <div class="r"><pre>where T : class</pre><div class="d">reference type</div></div>
+        <div class="r"><pre>where T : notnull</pre><div class="d">never null &middot; <v>C# 8</v></div></div>
+        <div class="r"><pre>where T : new()</pre><div class="d">parameterless ctor; must be last</div></div>
+        <div class="r"><pre>where T : allows ref struct</pre><div class="d"><k>T</k> may be <k>Span&lt;T&gt;</k> &middot; <v>C# 13</v></div></div>
+        <div class="r"><pre>static T Sum&lt;T&gt;(List&lt;T&gt; xs)
+    where T : INumber&lt;T&gt;
+{
+    T total = T.Zero;
+    foreach (T x in xs)
+        total += x;
+    return total;
+}</pre><div class="d">generic math &middot; <v>C# 11</v></div></div>
+        <div class="r"><pre>static abstract T Create();</pre><div class="d">static abstract member &middot; <v>C# 11</v></div></div>
       </div>
     </section>
 
     <section class="p">
       <h2>10 &nbsp;Extension members</h2>
       <div class="b">
-        <div class="r blk"><pre>public static string Truncate(this string s, int n)
-    =&gt; s.Length &lt;= n ? s : s[..n];</pre><span class="d">classic extension method, still valid, same IL</span></div>
-        <div class="r blk"><pre>extension&lt;T&gt;(IEnumerable&lt;T&gt; source)
+        <div class="r"><pre>public static bool IsBlank(
+    this string s)
+    =&gt; s.Trim().Length == 0;</pre><div class="d">classic extension method — still valid</div></div>
+        <div class="r"><pre>extension&lt;T&gt;(
+    IEnumerable&lt;T&gt; src)
 {
-    public bool IsEmpty =&gt; !source.Any();
-}</pre><span class="d">extension property, in a top-level <k>static</k> class &middot; <v>C# 14</v></span></div>
-        <div class="r blk"><pre>extension&lt;T&gt;(IEnumerable&lt;T&gt;)
-{ public static IEnumerable&lt;T&gt; Identity =&gt; []; }</pre><span class="d">no name: static members, operators &middot; <v>C# 14</v></span></div>
-        <div class="r blk"><pre>extension(IEnumerable&lt;int&gt; s)
+    public bool IsEmpty
+        =&gt; !src.Any();
+}</pre><div class="d">extension property; the block sits in a <k>static</k> class &middot; <v>C# 14</v></div></div>
+        <div class="r"><pre>extension&lt;T&gt;(List&lt;T&gt;)
 {
-    public int this[int i] =&gt; s.ElementAt(i);
-}</pre><span class="d">extension indexer &middot; <v>C# 15 preview</v></span></div>
+    public static List&lt;T&gt;
+        Empty =&gt; [];
+}</pre><div class="d">receiver type only: static members and operators &middot; <v>C# 14</v></div></div>
       </div>
     </section>
 
     <section class="p">
-      <h2>11 &nbsp;Collections &amp; collection expressions</h2>
+      <h2>11 &nbsp;Exceptions</h2>
       <div class="b">
-        <div class="r"><code>int[] numbers = [1, 2, 3];</code> <span class="d">collection expr &middot; <v>C# 12</v></span></div>
-        <div class="r"><code>List&lt;string&gt; names = ["A", "B"];</code> <span class="d">also sets, spans</span></div>
-        <div class="r"><code>int[] more = [0, .. numbers, 6];</code> <span class="d">spread operator</span></div>
-        <div class="r"><code>Dictionary&lt;string,int&gt; d = new();</code> <span class="d">no collection expr yet</span></div>
-        <div class="r"><code>d.TryGetValue("b", out int v)</code> <span class="d">lookup without throwing</span></div>
-        <div class="r"><code>ReadOnlySpan&lt;int&gt; s = array;</code> <span class="d">first-class spans &middot; <v>C# 14</v></span></div>
-        <div class="r"><code>numbers[^1]</code> &middot; <code>numbers[1..^1]</code> <span class="d"><k>^1</k> is last &middot; <v>C# 8</v></span></div>
-        <div class="r"><code>list[^1]</code> <span class="d">works, but <k>List&lt;T&gt;</k> has no range slicing</span></div>
-        <div class="r"><code>HashSet&lt;int&gt; set = [1, 2, 3];</code> <span class="d">plus <k>UnionWith</k> etc.</span></div>
-        <div class="r"><code>queue.Dequeue()</code> &middot; <code>stack.Pop()</code> <span class="d">FIFO / LIFO</span></div>
-        <div class="r"><code>[with(capacity: 10), .. names]</code> <span class="d">args &middot; <v>C# 15 preview</v></span></div>
+        <div class="r"><pre>try
+{
+    Risky();
+}
+catch (IOException ex)
+{
+    Log(ex);
+    throw;
+}
+finally
+{
+    Cleanup();
+}</pre><div class="d"><k>finally</k> always runs</div></div>
+        <div class="r"><pre>catch (Ex e) when (IsBad(e))</pre><div class="d">exception filter &middot; <v>C# 6</v></div></div>
+        <div class="r"><pre>throw;</pre><div class="d">keeps the original stack trace</div></div>
+        <div class="r"><pre>throw ex;</pre><div class="d">resets it — rarely wanted</div></div>
+        <div class="r"><pre>throw new ArgumentException(
+    "Empty.", nameof(data));</pre><div class="d">always name the parameter</div></div>
+        <div class="r"><pre>ArgumentNullException
+    .ThrowIfNull(data);</pre><div class="d">guard clause &middot; <v>.NET 6</v></div></div>
+        <div class="r"><pre>class NotFound(int id)
+    : Exception($"No {id}")
+{
+    public int Id =&gt; id;
+}</pre><div class="d">custom exception; no serialization ctor &middot; <v>.NET 8</v></div></div>
+        <div class="r"><pre>int.TryParse(s, out int n)</pre><div class="d">use <k>Try…</k> for expected failures</div></div>
+      </div>
+    </section>
+
+    <section class="p">
+      <h2>12 &nbsp;Code organization</h2>
+      <div class="b">
+        <div class="r"><pre>namespace MyApp.Services;</pre><div class="d">file-scoped namespace &middot; <v>C# 10</v></div></div>
+        <div class="r"><pre>global using System.Linq;</pre><div class="d">whole project &middot; <v>C# 10</v></div></div>
+        <div class="r"><pre>using static System.Math;</pre><div class="d">then just <k>Sqrt(x)</k></div></div>
+        <div class="r"><pre>using Pt = (int X, int Y);</pre><div class="d">alias any type &middot; <v>C# 12</v></div></div>
+        <div class="r"><pre>file class Validator { }</pre><div class="d">visible in this file only &middot; <v>C# 11</v></div></div>
+        <div class="r"><pre>public</pre><div class="d">anywhere</div></div>
+        <div class="r"><pre>internal</pre><div class="d">this assembly</div></div>
+        <div class="r"><pre>protected</pre><div class="d">this type and derived types</div></div>
+        <div class="r"><pre>private</pre><div class="d">this type only</div></div>
+        <div class="r"><pre>protected internal</pre><div class="d">assembly OR derived</div></div>
+        <div class="r"><pre>private protected</pre><div class="d">assembly AND derived</div></div>
+        <div class="r"><pre>public partial string Conn
+    { get; set; }</pre><div class="d">partial property &middot; <v>C# 13</v></div></div>
+        <div class="r"><pre>#:package Spectre.Console
+#:sdk Microsoft.NET.Sdk.Web
+AnsiConsole.Write("Hello");</pre><div class="d">a whole app in one file: <k>dotnet run app.cs</k> &middot; <v>.NET 10</v></div></div>
       </div>
     </section>
 
@@ -420,112 +471,108 @@ where T : new()    <span class="cmt">// ctor, must be last</span></pre><span cla
   <div class="col">
 
     <section class="p">
-      <h2>12 &nbsp;LINQ</h2>
+      <h2>13 &nbsp;Classes, records &amp; structs</h2>
       <div class="b">
-        <div class="r"><code>xs.Where(p)</code> &middot; <code>xs.Select(f)</code> <span class="d">filter / project</span></div>
-        <div class="r"><code>.OrderBy(k).ThenByDescending(k)</code> <span class="d">sort by several keys</span></div>
-        <div class="r"><code>people.GroupBy(p =&gt; p.City)</code> <span class="d">gives <k>IGrouping</k></span></div>
-        <div class="r"><code>nums.First(n =&gt; n &gt; 5)</code> <span class="d">also <k>Any</k>, <k>All</k>, <k>Single</k></span></div>
-        <div class="r"><code>query.ToList()</code> <span class="d">LINQ is lazy until materialized</span></div>
-        <div class="r"><code>from n in xs where n &gt; 5 select n * 2</code> <span class="d">query syntax</span></div>
-        <div class="r"><code>nums.Chunk(3)</code> &middot; <code>people.MaxBy(k)</code> <span class="d"><v>.NET 6</v>, also <k>MinBy</k></span></div>
-        <div class="r"><code>words.CountBy(w =&gt; w)</code> &middot; <code>xs.Index()</code> <span class="d"><v>.NET 9</v></span></div>
-        <div class="r blk"><pre>people.LeftJoin(orders, p =&gt; p.Id, o =&gt; o.CustomerId,
-                (p, o) =&gt; (p.Name, o?.Total));</pre><span class="d"><v>.NET 10</v>, keeps unmatched left rows</span></div>
-        <div class="r"><code>numbers.Shuffle()</code> <span class="d"><v>.NET 10</v>, also <k>Sequence</k></span></div>
-        <div class="r"><code>nums.Sum()</code> &middot; <code>nums.Average()</code> <span class="d">aggregates</span></div>
+        <div class="r"><pre>public int Age { get; set; }</pre><div class="d">auto property</div></div>
+        <div class="r"><pre>public bool Ok =&gt; Age &gt;= 18;</pre><div class="d">computed property</div></div>
+        <div class="r"><pre>public int Id { get; init; }</pre><div class="d">set during initialization &middot; <v>C# 9</v></div></div>
+        <div class="r"><pre>class Person(string name)</pre><div class="d">primary constructor &middot; <v>C# 12</v></div></div>
+        <div class="r"><pre>record Person(string Name);</pre><div class="d">value equality, <k>Deconstruct</k> &middot; <v>C# 9</v></div></div>
+        <div class="r"><pre>person with { Age = 31 }</pre><div class="d">copy, changing members</div></div>
+        <div class="r"><pre>record struct Point(int X);</pre><div class="d">value-type record &middot; <v>C# 10</v></div></div>
+        <div class="r"><pre>readonly record struct Rgb(
+    byte R, byte G);</pre><div class="d">members become <k>get</k>/<k>init</k></div></div>
+        <div class="r"><pre>sealed class Cache { }</pre><div class="d">no further inheritance</div></div>
+        <div class="r"><pre>abstract class Shape { }</pre><div class="d">must be derived from</div></div>
+        <div class="r"><pre>static class Helpers { }</pre><div class="d">no instances</div></div>
       </div>
     </section>
 
     <section class="p">
-      <h2>13 &nbsp;Async</h2>
+      <h2>14 &nbsp;Collections</h2>
       <div class="b">
-        <div class="r"><code>async Task&lt;string&gt; GetAsync()</code> <span class="d"><k>Task&lt;T&gt;</k> returns a value</span></div>
-        <div class="r"><code>await Task.WhenAll(t1, t2);</code> <span class="d">concurrent, wait for all</span></div>
-        <div class="r"><code>await Task.WhenAny(t1, t2);</code> <span class="d">first one to finish</span></div>
-        <div class="r"><code>Task.WhenEach(tasks)</code> <span class="d">as each lands &middot; <v>.NET 9</v></span></div>
-        <div class="r"><code>await Task.Delay(100, token);</code> <span class="d">pass the token down</span></div>
-        <div class="r"><code>cts.CancelAfter(timeout);</code> <span class="d">catch <k>OperationCanceled</k></span></div>
-        <div class="r"><code>await foreach (var x in Xs())</code> <span class="d"><k>IAsyncEnumerable</k> &middot; <v>C# 8</v></span></div>
-        <div class="r"><code>.ConfigureAwait(false)</code> <span class="d">in libraries, don't capture</span></div>
-        <div class="r"><code>async void</code> <span class="d">event handlers only, cannot be awaited</span></div>
+        <div class="r"><pre>int[] numbers = [1, 2, 3];</pre><div class="d">collection expression &middot; <v>C# 12</v></div></div>
+        <div class="r"><pre>List&lt;string&gt; names = ["A"];</pre><div class="d">also sets, spans, interfaces</div></div>
+        <div class="r"><pre>int[] more = [0, .. nums];</pre><div class="d">spread operator</div></div>
+        <div class="r"><pre>Dictionary&lt;string, int&gt; d =
+    new() { ["a"] = 1 };</pre><div class="d">no collection-expression form yet</div></div>
+        <div class="r"><pre>d.TryGetValue(k, out int v)</pre><div class="d">lookup without throwing</div></div>
+        <div class="r"><pre>ReadOnlySpan&lt;int&gt; s = array;</pre><div class="d">first-class spans, no copy &middot; <v>C# 14</v></div></div>
+        <div class="r"><pre>numbers[^1]</pre><div class="d">last element &middot; <v>C# 8</v></div></div>
+        <div class="r"><pre>numbers[1..^1]</pre><div class="d">range slice &middot; <v>C# 8</v></div></div>
+        <div class="r"><pre>list[^1]</pre><div class="d">works, but <k>List&lt;T&gt;</k> has no range slicing</div></div>
+        <div class="r"><pre>HashSet&lt;int&gt; set = [1, 2];</pre><div class="d">plus <k>UnionWith</k>, <k>IntersectWith</k></div></div>
+        <div class="r"><pre>queue.Enqueue(x);</pre><div class="d"><k>Queue&lt;T&gt;</k> is FIFO</div></div>
+        <div class="r"><pre>stack.Push(x);</pre><div class="d"><k>Stack&lt;T&gt;</k> is LIFO</div></div>
       </div>
     </section>
 
     <section class="p">
-      <h2>14 &nbsp;Exceptions</h2>
+      <h2>15 &nbsp;LINQ</h2>
       <div class="b">
-        <div class="r blk"><pre>try { Risky(); }
-catch (IOException ex) when (IsTransient(ex)) { }
-catch (Exception ex) { Log(ex); throw; }
-finally { Cleanup(); }</pre><span class="d"><k>when</k> runs before unwinding; <k>finally</k> always runs</span></div>
-        <div class="r"><code>throw;</code> &middot; <code>throw ex;</code> <span class="d">keeps / resets the stack trace</span></div>
-        <div class="r"><code>throw new ArgumentException(m, nameof(x));</code> <span class="d">name the param</span></div>
-        <div class="r"><code>ArgumentNullException.ThrowIfNull(x);</code> <span class="d">guard &middot; <v>.NET 6</v></span></div>
-        <div class="r blk"><pre>class CustomerNotFound(int id) : Exception($"No {id}")
-{ public int CustomerId { get; } = id; }</pre><span class="d">custom exception; no serialization ctor since .NET 8</span></div>
-        <div class="r"><code>int.TryParse(s, out int n)</code> <span class="d">for expected failures</span></div>
+        <div class="r"><pre>xs.Where(n =&gt; n &gt; 5)</pre><div class="d">filter</div></div>
+        <div class="r"><pre>xs.Select(p =&gt; p.Name)</pre><div class="d">project each element</div></div>
+        <div class="r"><pre>xs.OrderBy(p =&gt; p.City)</pre><div class="d">sort; <k>ThenBy</k> for more keys</div></div>
+        <div class="r"><pre>xs.GroupBy(p =&gt; p.City)</pre><div class="d">gives <k>IGrouping</k></div></div>
+        <div class="r"><pre>xs.First(n =&gt; n &gt; 5)</pre><div class="d">also <k>Any</k>, <k>All</k>, <k>Single</k></div></div>
+        <div class="r"><pre>xs.Sum()</pre><div class="d">also <k>Min</k>, <k>Max</k>, <k>Average</k></div></div>
+        <div class="r"><pre>query.ToList()</pre><div class="d">LINQ is lazy until this</div></div>
+        <div class="r"><pre>from n in xs
+where n &gt; 5
+select n * 2</pre><div class="d">query syntax</div></div>
       </div>
     </section>
 
     <section class="p">
-      <h2>15 &nbsp;Code organization</h2>
+      <h2>16 &nbsp;Newer LINQ operators</h2>
       <div class="b">
-        <div class="r"><code>namespace MyApp.Services;</code> <span class="d">file-scoped &middot; <v>C# 10</v></span></div>
-        <div class="r"><code>global using System.Linq;</code> <span class="d">whole project &middot; <v>C# 10</v></span></div>
-        <div class="r"><code>using static System.Math;</code> <span class="d">then just <k>Sqrt(x)</k></span></div>
-        <div class="r"><code>using Point = (int X, int Y);</code> <span class="d">alias any type &middot; <v>C# 12</v></span></div>
-        <div class="r"><code>file class UserValidator { }</code> <span class="d">this file only &middot; <v>C# 11</v></span></div>
-        <div class="r blk"><pre>public    <span class="cmt">// anywhere</span>   internal  <span class="cmt">// this assembly</span>
-protected <span class="cmt">// derived</span>    private   <span class="cmt">// this type</span>
-protected internal <span class="cmt">// assembly OR derived</span>
-private protected  <span class="cmt">// assembly AND derived</span></pre><span class="d">access modifiers</span></div>
-        <div class="r"><code>partial string Conn { get; set; }</code> <span class="d">partial prop &middot; <v>C# 13</v></span></div>
-        <div class="r blk"><pre>#:package Spectre.Console@0.49.1
-AnsiConsole.MarkupLine("[green]Hello[/]");</pre><span class="d">one <k>.cs</k> file is an app: <k>dotnet run app.cs</k> &middot; <v>.NET 10</v></span></div>
+        <div class="r"><pre>xs.Chunk(3)</pre><div class="d">fixed-size batches &middot; <v>.NET 6</v></div></div>
+        <div class="r"><pre>xs.MaxBy(p =&gt; p.Age)</pre><div class="d">also <k>MinBy</k>, <k>DistinctBy</k> &middot; <v>.NET 6</v></div></div>
+        <div class="r"><pre>xs.CountBy(w =&gt; w)</pre><div class="d">count per key &middot; <v>.NET 9</v></div></div>
+        <div class="r"><pre>xs.Index()</pre><div class="d">also <k>AggregateBy</k> &middot; <v>.NET 9</v></div></div>
+        <div class="r"><pre>people.LeftJoin(orders,
+    p =&gt; p.Id,
+    o =&gt; o.CustomerId,
+    (p, o) =&gt; p.Name)</pre><div class="d">keeps unmatched left rows &middot; <v>.NET 10</v></div></div>
+        <div class="r"><pre>numbers.Shuffle()</pre><div class="d">also <k>Sequence</k> &middot; <v>.NET 10</v></div></div>
+      </div>
+    </section>
+
+    <section class="p">
+      <h2>17 &nbsp;Async</h2>
+      <div class="b">
+        <div class="r"><pre>async Task&lt;string&gt; Get()</pre><div class="d"><k>Task&lt;T&gt;</k> returns a value</div></div>
+        <div class="r"><pre>async Task SaveAsync()</pre><div class="d"><k>Task</k> returns nothing</div></div>
+        <div class="r"><pre>ValueTask&lt;int&gt; ReadAsync()</pre><div class="d">often already complete</div></div>
+        <div class="r"><pre>await Task.WhenAll(t1, t2);</pre><div class="d">concurrent, wait for all</div></div>
+        <div class="r"><pre>await Task.WhenAny(t1, t2);</pre><div class="d">first one to finish</div></div>
+        <div class="r"><pre>Task.WhenEach(tasks)</pre><div class="d">handle each as it lands &middot; <v>.NET 9</v></div></div>
+        <div class="r"><pre>await Task.Delay(10, token);</pre><div class="d">pass the token down</div></div>
+        <div class="r"><pre>cts.CancelAfter(timeout);</pre><div class="d">catch <k>OperationCanceled</k></div></div>
+        <div class="r"><pre>await foreach (var x in Q())</pre><div class="d"><k>IAsyncEnumerable</k> &middot; <v>C# 8</v></div></div>
+        <div class="r"><pre>.ConfigureAwait(false)</pre><div class="d">in libraries, don't capture</div></div>
+        <div class="r"><pre>async void</pre><div class="d">event handlers only — cannot be awaited</div></div>
       </div>
     </section>
 
     <section class="p acc">
-      <h2>16 &nbsp;New in C# 14 (.NET 10)</h2>
+      <h2>18 &nbsp;New in C# 14 (.NET 10)</h2>
       <div class="b">
-        <div class="r"><code>extension(IEnumerable&lt;int&gt; src)</code> <span class="d">extension members</span></div>
-        <div class="r"><code>int H { get; set =&gt; field = v; }</code> <span class="d">the <k>field</k> keyword</span></div>
-        <div class="r"><code>customer?.Order = value;</code> <span class="d">null-conditional assign</span></div>
-        <div class="r"><code>nameof(List&lt;&gt;)</code> <span class="d">unbound generics, gives <k>"List"</k></span></div>
-        <div class="r"><code>ReadOnlySpan&lt;int&gt; s = array;</code> <span class="d">first-class spans</span></div>
-        <div class="r"><code>(s, out n) =&gt; Try(s, out n)</code> <span class="d">lambda modifiers, no types</span></div>
-        <div class="r"><code>public partial Settings(string p);</code> <span class="d">partial ctors, events</span></div>
-        <div class="r"><code>public void operator +=(T x)</code> <span class="d">compound assign in place</span></div>
-      </div>
-    </section>
-
-    <section class="p dark">
-      <h2>17 &nbsp;C# 15 preview (.NET 11)</h2>
-      <div class="b">
-        <div class="r"><code>union Pet(Cat, Dog, Bird);</code> <span class="d">exactly one case type</span></div>
-        <div class="r"><code>closed record class Shape;</code> <span class="d">exhaustive <k>switch</k>, no <k>_</k></span></div>
-        <div class="r"><code>break outer;</code> &middot; <code>continue outer;</code> <span class="d">labeled jumps</span></div>
-        <div class="r"><code>[with(capacity: 10), .. xs]</code> <span class="d">coll. expr. arguments</span></div>
-        <div class="r"><code>this[int i] =&gt; s.ElementAt(i)</code> <span class="d">extension indexer</span></div>
-        <div class="note">Preview: needs <k>&lt;LangVersion&gt;preview&lt;/LangVersion&gt;</k> on a .NET 11 preview SDK, and can still change.</div>
+        <div class="r"><pre>extension(List&lt;int&gt; src)</pre><div class="d">properties, statics and operators</div></div>
+        <div class="r"><pre>set =&gt; field = value;</pre><div class="d"><k>field</k> is the generated backing field</div></div>
+        <div class="r"><pre>customer?.Order = value;</pre><div class="d">null-conditional assignment</div></div>
+        <div class="r"><pre>nameof(List&lt;&gt;)</pre><div class="d">unbound generics, gives <k>"List"</k></div></div>
+        <div class="r"><pre>ReadOnlySpan&lt;int&gt; s = array;</pre><div class="d">first-class spans</div></div>
+        <div class="r"><pre>(s, out n) =&gt; Try(s, out n)</pre><div class="d">lambda modifiers without types</div></div>
+        <div class="r"><pre>partial Settings(string p);</pre><div class="d">partial constructors and events</div></div>
+        <div class="r"><pre>public void operator +=(T x)</pre><div class="d">compound assignment, in place</div></div>
       </div>
     </section>
 
   </div>
+
   </div>
   </main>
-
-  <footer>
-    <div class="f-left">
-      <img class="f-icon" src="file:///root/.claude/skills/synced/acb76ae3-784c-4c86-bd03-ce5b0aa44400_a3c0c1ef-f73b-4513-be5f-7c3d17c6f5dd/techworld-infographics/assets/logos/icon.png" alt="TechWorld with Milan">
-      <div class="f-links">techworld-with-milan.com &nbsp;<span>&middot;</span>&nbsp; newsletter.techworld-with-milan.com &nbsp;<span>&middot;</span>&nbsp; github.com/milanm/csharp-cheatsheet</div>
-    </div>
-    <div class="f-right">
-      <div class="f-ed">2026 edition &middot; C# 14 / .NET 10 &middot; rev. 2026-09</div>
-      <img class="f-logo" src="file:///root/.claude/skills/synced/acb76ae3-784c-4c86-bd03-ce5b0aa44400_a3c0c1ef-f73b-4513-be5f-7c3d17c6f5dd/techworld-infographics/assets/logos/logo-white.png" alt="TechWorld with Milan">
-    </div>
-  </footer>
 </div>
 </body>
 </html>

@@ -6,13 +6,17 @@ then run a QA pass over the live DOM.
     python3 one-page/render.py
 
 QA checks (any FAIL must be fixed before shipping):
-  - horizontal overflow of the page and of every code block
+  - horizontal overflow of the page and of every code block (a code line
+    that does not fit its column is a FAIL, never a silent clip)
   - content cut off at the bottom of the canvas
-  - any text rendered below 13px
+  - any text rendered below MIN_FONT_PX
   - box-shadow anywhere (brand rule)
   - emoji anywhere (brand rule)
+  - no C# 15 preview material anywhere (this sheet is C# 14 / .NET 10)
+  - no footer band
+  - code cells in a panel all share one width, so the notes line up
   - per-column heights (must be within BALANCE_TOLERANCE of each other)
-  - page height inside TARGET_MIN..TARGET_MAX
+Page height is free; it is reported, not constrained.
 """
 
 import re
@@ -28,10 +32,8 @@ PDF = HERE / "csharp-cheatsheet.pdf"
 
 WIDTH = 1600
 SCALE = 2
-TARGET_MIN = 2100
-TARGET_MAX = 2300
 BALANCE_TOLERANCE = 60
-MIN_FONT_PX = 13.0
+MIN_FONT_PX = 14.0
 
 EMOJI = re.compile(
     "[" "\U0001F000-\U0001FAFF" "←-⇿" "⌀-⏿"
@@ -81,6 +83,23 @@ JS_AUDIT = r"""
         .filter(n => n.nodeType === 3).map(n => n.textContent).join('');
       if (EMOJI.test(t)) out.emoji.push(label(el));
     }
+  });
+
+  // Code cells must share one width inside a panel, and single-line rows
+  // should land near the intended row height.
+  out.panels = [];
+  document.querySelectorAll('section.p').forEach(p => {
+    const title = p.querySelector('h2').textContent.trim().replace(/\s+/g, ' ');
+    const widths = new Set(), singles = [];
+    p.querySelectorAll('.r').forEach(r => {
+      const pre = r.querySelector('pre');
+      widths.add(Math.round(pre.getBoundingClientRect().width));
+      const lines = pre.textContent.split('\n').length;
+      const note = r.querySelector('.d');
+      const noteLines = Math.round(note.getBoundingClientRect().height / 20.1);
+      if (lines === 1 && noteLines <= 1) singles.push(Math.round(r.getBoundingClientRect().height));
+    });
+    out.panels.push({title, widths: [...widths], singles});
   });
 
   document.querySelectorAll('.cols > .col').forEach((col, i) => {
@@ -193,11 +212,23 @@ def main() -> int:
     if spread > BALANCE_TOLERANCE:
         failures.append(f"columns unbalanced: spread {spread}px > "
                         f"{BALANCE_TOLERANCE}px")
-    if not (TARGET_MIN <= height <= TARGET_MAX):
-        failures.append(f"page height {height}px outside target "
-                        f"{TARGET_MIN}-{TARGET_MAX}px")
+    for pan in audit["panels"]:
+        if len(pan["widths"]) > 1:
+            failures.append(f"code cells not aligned in {pan['title']}: "
+                            f"widths {pan['widths']}")
+
+    singles = [h for pan in audit["panels"] for h in pan["singles"]]
+    if singles:
+        print(f"single-line row height: min {min(singles)} / max {max(singles)} "
+              f"/ typical {sorted(singles)[len(singles)//2]} px  "
+              f"({len(singles)} rows)")
 
     src = HTML.read_text(encoding="utf-8")
+    if "<footer" in src:
+        failures.append("footer band still present")
+    for banned in ("C# 15", "union ", "closed record", "break outer", "with(capacity"):
+        if banned in src:
+            failures.append(f"C# 15 preview material still present: {banned!r}")
     if EMOJI.search(src):
         failures.append("emoji found in the HTML source")
     if re.search(r"box-shadow\s*:", src):
