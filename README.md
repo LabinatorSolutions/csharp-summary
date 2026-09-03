@@ -39,6 +39,14 @@ The language version follows the target framework by default. To try preview fea
 
 🔖 Feel free to **bookmark this page** and refer to it whenever you need to refresh your knowledge of C# language features or modern development techniques.
 
+## One-page cheat sheet
+
+The whole language on a single page, for printing or keeping open on a second screen. Every row is a snippet plus a short note, with the C# or .NET version where it matters. Click the image for the full-size version, or grab the [PDF](one-page/csharp-cheatsheet.pdf).
+
+[![C# one-page cheat sheet](one-page/csharp-cheatsheet.png)](one-page/csharp-cheatsheet.png)
+
+The sheet is generated from [one-page/csharp-cheatsheet.html](one-page/csharp-cheatsheet.html) with [one-page/render.py](one-page/render.py). It covers what fits on one page; the sections below cover everything, including C# 15 preview features.
+
 The image below show an **overview of the C# language features and concepts** covered in this cheat sheet:
 
 ![C# Mind map](csharp-mindmap.png)
