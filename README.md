@@ -1,4 +1,20 @@
-# C# Programming Cheat Sheet (2025 Edition)
+# C# Programming Cheat Sheet (2026 Edition)
+
+## [Grab my .NET Ultimate Bundle (500+ pages and a course)](https://www.patreon.com/techworld_with_milan/shop/ultimate-net-bundle-for-2025-1519389)
+
+* A brief walk through the .NET ecosystem 
+* Modern C# v6‑13 features
+* 200+ interview Q\&As that hiring managers ask
+* 50+ real‑world design patterns in C#
+* Clean code development in C# course
+* ASP.NET Core auth  & middleware best practices
+* Bonus: A complete C# Cheat Sheet
+
+[Get the .NET Ultimate Bundle 🚀](https://www.patreon.com/techworld_with_milan/shop/ultimate-net-bundle-for-2025-1519389)
+
+[![.NET Ultimate Bundle](Bundle.png)](https://www.patreon.com/techworld_with_milan/shop/ultimate-net-bundle-for-2025-1519389)
+
+If you want to learn more about C# and .NET technologies, be sure to subscribe to **[my newsletter](https://newsletter.techworld-with-milan.com/)**.
 
 ## [Grab my .NET Ultimate Bundle for 2025 (500+ pages and a course)](https://www.patreon.com/techworld_with_milan/shop/ultimate-net-bundle-for-2025-1519389)
 
@@ -18,15 +34,34 @@ If you want to learn more about C# and .NET technologies, be sure to subscribe t
 
 ## Introduction
 
-This comprehensive C# cheat sheet serves as a quick reference guide for C# developers at all skill levels. It covers the core language features, modern patterns, and best practices as of 2025. 
+This C# cheat sheet is a quick reference for C# developers at all skill levels. It covers the core language features, modern patterns, and best practices as of 2026.
 
-The cheat sheet organizes **fundamental concepts into more advanced topics**,** making it useful for learning and reference.
+The cheat sheet organizes **fundamental concepts into more advanced topics**, making it useful for learning and reference.
 
 C# has evolved significantly since its inception, with regular updates introducing powerful new features while maintaining backward compatibility.
 
-This guide incorporates the latest language enhancements **through C# 13 and beyond**, as well as code organization, and development approaches that have become standard in the .NET ecosystem.
+This guide covers the language **through C# 14 (shipped with .NET 10 in November 2025)** and previews what **C# 15** brings with .NET 11. Every example that depends on a specific language or runtime version is labeled, so you can tell what works on the version you target.
+
+### C# and .NET version map
+
+| C# version | Ships with | Support | Headline features |
+|---|---|---|---|
+| C# 12 | .NET 8 (Nov 2023) | LTS, ends Nov 2026 | Primary constructors, collection expressions, alias any type, default lambda parameters |
+| C# 13 | .NET 9 (Nov 2024) | STS, ended May 2026 | `params` collections, `System.Threading.Lock`, partial properties, `allows ref struct`, `\e` escape |
+| C# 14 | .NET 10 (Nov 2025) | LTS, until Nov 2028 | Extension members, `field` keyword, null-conditional assignment, `nameof(List<>)`, first-class spans, lambda parameter modifiers, partial constructors and events, user-defined compound assignment |
+| C# 15 (preview) | .NET 11 (Nov 2026) | STS | Union types, `closed` hierarchies, extension indexers, labeled `break`/`continue`, collection expression arguments, memory-safety changes |
+
+The language version follows the target framework by default. To try preview features on .NET 11 previews, set `<LangVersion>preview</LangVersion>` in your project file. Everything in this sheet marked *C# 15 (preview)* can change before release.
 
 🔖 Feel free to **bookmark this page** and refer to it whenever you need to refresh your knowledge of C# language features or modern development techniques.
+
+## One-page cheat sheet
+
+The whole language on a single page, for printing or keeping open on a second screen. Every row is a snippet plus a short note, with the C# or .NET version where it matters. Click the image for the full-size version, or grab the [PDF](one-page/csharp-cheatsheet.pdf).
+
+[![C# one-page cheat sheet](one-page/csharp-cheatsheet.png)](one-page/csharp-cheatsheet.png)
+
+The sheet is generated from [one-page/csharp-cheatsheet.html](one-page/csharp-cheatsheet.html) with [one-page/render.py](one-page/render.py). It covers what fits on one page; the sections below cover everything, including C# 15 preview features.
 
 The image below show an **overview of the C# language features and concepts** covered in this cheat sheet:
 
@@ -60,6 +95,7 @@ If you like or are using this project to learn or start your solution, please gi
   - [Method parameters](#method-parameters)
   - [Local functions](#local-functions-c-70)
   - [Extension methods](#extension-methods)
+  - [Extension members](#extension-members-c-14)
   - [Lambda expressions](#lambda-expressions)
   - [Method overloading](#method-overloading)
 - [Delegates and events](#delegates-and-events)
@@ -73,9 +109,10 @@ If you like or are using this project to learn or start your solution, please gi
   - [Tuples](#tuples)
   - [Nullable types](#nullable-types)
 - [Generics](#generics)
-  - [Generic classes](#generic-classes) 
+  - [Generic classes](#generic-classes)
   - [Generic methods](#generic-methods)
-  - [Constraints](#constraints)  
+  - [Constraints](#constraints)
+  - [Static abstract members and generic math](#static-abstract-members-and-generic-math-c-11)
 - [Classes](#classes-and-inheritance)
   - [Constructors and initialization](#constructors-and-initialization)
   - [Primary constructors](#primary-constructors-c-12)
@@ -83,9 +120,11 @@ If you like or are using this project to learn or start your solution, please gi
   - [Abstract classes](#abstract-classes)
   - [Sealed classes and members](#sealed-classes-and-members)
   - [Polymorphism](#polymorphism)
+  - [Operator overloading](#operator-overloading)
 - [Collections](#collections)
   - [Collection expressions](#collection-expressions-c-12)
   - [Arrays](#arrays)
+  - [Indices and ranges](#indices-and-ranges-c-80)
   - [Lists](#lists)
   - [Dictionary](#dictionary)
   - [HashSet](#hashset)
@@ -98,6 +137,7 @@ If you like or are using this project to learn or start your solution, please gi
   - [Logical patterns](#logical-patterns)
   - [List patterns](#list-patterns-c-110)
   - [Discard patterns](#discard-pattern)
+  - [Closed hierarchies and union types](#closed-hierarchies-and-union-types-c-15-preview)
 - [Exceptions](#exceptions)
   - [Try-Catch-Finally](#try-catch-finally)
   - [Throwing exceptions](#throwing-exceptions)
@@ -112,9 +152,11 @@ If you like or are using this project to learn or start your solution, please gi
   - [Namespaces](#namespaces)
   - [Using directives](#using-directives)
   - [File-scoped types](#file-scoped-types-c-11)
-  - [Partial classes](#partial-classes)
+  - [Partial classes and members](#partial-classes-and-members)
   - [Access modifiers](#access-modifiers)
   - [Properties and indexers](#properties-and-indexers)
+  - [File-based apps](#file-based-apps-net-10)
+- [What's new in C# 14 and C# 15](#whats-new-in-c-14-and-c-15)
 
 <div id="comments"></div>
 
@@ -187,13 +229,21 @@ string json = """
 """;
 
 // Raw string interpolation (C# 11+)
-string name = "Jane";
-string rawInterpolated = $"""
+// The number of $ signs sets how many braces open an interpolation hole.
+// With $$ a single { is literal JSON and {{ }} is the interpolation.
+string userName = "Jane";
+string rawInterpolated = $$"""
 {
-    "name": "{{name}}",
+    "name": "{{userName}}",
     "created": "{{DateTime.Now}}"
 }
 """;
+
+// UTF-8 string literals (C# 11+) - ReadOnlySpan<byte>, no runtime encoding cost
+ReadOnlySpan<byte> utf8 = "Hello"u8;
+
+// Escape sequence for the ESC character (C# 13+), handy for terminal colors
+string red = "\e[31mError\e[0m";
 
 // Common string methods
 string text = "Hello, World!";
@@ -236,7 +286,7 @@ string result = sb.ToString();
 
 C# is a strongly-typed language with a comprehensive type system that forms the foundation of all C# programs. Understanding these basic types is essential for writing efficient and type-safe code. 
 
-C# types are categorized as **value types (stored on the stack)** and **reference types (stored on the heap)**, each with different memory and performance characteristics.
+C# types are categorized as **value types** (the variable holds the data itself and copies on assignment) and **reference types** (the variable holds a reference to an object on the managed heap). Value types often live on the stack or inline in another object, but that is an implementation detail, not part of the language definition.
 
 ```csharp
 // Integer types
@@ -272,8 +322,8 @@ char escapeChar = '\n';              // Newline escape sequence
 // DateTime and TimeSpan
 DateTime now = DateTime.Now;
 DateTime utcNow = DateTime.UtcNow;
-DateOnly today = DateOnly.FromDateTime(DateTime.Today); // Date without time (C# 10+)
-TimeOnly noon = new TimeOnly(12, 0, 0);                 // Time without date (C# 10+)
+DateOnly today = DateOnly.FromDateTime(DateTime.Today); // Date without time (.NET 6+)
+TimeOnly noon = new TimeOnly(12, 0, 0);                 // Time without date (.NET 6+)
 DateTime specific = new DateTime(2023, 1, 1);
 TimeSpan oneHour = TimeSpan.FromHours(1);
 TimeSpan duration = TimeSpan.FromMinutes(90);
@@ -288,10 +338,14 @@ bool defaultBool = default;          // false
 string defaultString = default;      // null
 DateTime defaultDateTime = default;  // 0001-01-01 00:00:00
 
-// Numeric type aliases (C# 12+)
+// Alias any type, including tuples and nullable types (C# 12+, at file top)
 using intptr = nint;               // Native-sized integer
 using uintptr = nuint;             // Unsigned native-sized integer
-using index = System.Index;        // Type alias for Index
+using Point = (int X, int Y);      // Tuple alias
+
+// nameof with unbound generic types (C# 14+)
+string listName = nameof(List<>);            // "List"
+string dictName = nameof(Dictionary<,>);     // "Dictionary"
 ```
 
 Type inference with `var` (compile-time determined):
@@ -318,7 +372,7 @@ public static readonly HttpClient SharedClient = new HttpClient();
 // Init-only setter - can only be set during initialization
 public string Id { get; init; } = Guid.NewGuid().ToString();
 
-// Read-only fields/properties with field/property initializers
+// Required member (C# 11+) - callers must set it in an object initializer
 public required string Name { get; init; }
 ```
 
@@ -391,6 +445,12 @@ int? length = customer?.Name?.Length;
 // Null-coalescing assignment (??=) - C# 8.0+
 // Assigns the right operand only if the left operand is null
 userName ??= "Anonymous";
+
+// Null-conditional assignment (C# 14+)
+// The right side runs only when the left side is not null
+customer?.Order = GetCurrentOrder();   // No call to GetCurrentOrder() if customer is null
+customer?.Address?.City = "Belgrade";
+customer?.Balance += 10;               // Works with compound assignment too (but not ++ or --)
 ```
 
 ### Switch statements and expressions
@@ -485,6 +545,20 @@ for (int i = 0; i < 10; i++)
     
     Console.WriteLine($"Odd number: {i}");
 }
+
+// Labeled break and continue (C# 15 preview)
+// Jump out of, or to the next iteration of, an outer loop without a flag or goto
+outer: for (int row = 0; row < grid.Height; row++)
+{
+    for (int column = 0; column < grid.Width; column++)
+    {
+        if (grid[row, column].IsBlocked)
+            continue outer;   // Next row
+
+        if (grid[row, column].IsGoal)
+            break outer;      // Leave both loops
+    }
+}
 ```
 
 ### Foreach loops
@@ -498,10 +572,16 @@ foreach (string name in names)
     Console.WriteLine(name);
 }
 
-// Using index with foreach (C# 9.0+)
-foreach (string name in names.Select((value, index) => new { value, index }))
+// Index alongside each element (.NET 9+ LINQ Index())
+foreach (var (index, name) in names.Index())
 {
-    Console.WriteLine($"{name.index}: {name.value}");
+    Console.WriteLine($"{index}: {name}");
+}
+
+// Same thing on older runtimes
+foreach (var (name, index) in names.Select((value, i) => (value, i)))
+{
+    Console.WriteLine($"{index}: {name}");
 }
 
 // Iterating through key-value pairs
@@ -582,6 +662,24 @@ public void AddItem(string item)
     }
 }
 
+// System.Threading.Lock (.NET 9+ / C# 13+)
+// A dedicated lock type. The lock statement recognizes it and uses Lock.EnterScope(),
+// which is faster than Monitor on a plain object and avoids locking on arbitrary objects.
+private readonly Lock _lock = new();
+
+public void AddItemModern(string item)
+{
+    lock (_lock)
+    {
+        _items.Add(item);
+    }
+}
+
+// Manual scope when you can't use the statement (the scope is a ref struct, disposed at end)
+using (_lock.EnterScope())
+{
+    _items.Add("manual");
+}
 ```
 
 **Best practices for locks:**
@@ -660,13 +758,15 @@ unsafe
     Console.WriteLine($"Updated value: {value}");
 }
 
-// sizeof operator (only allowed in unsafe context)
+// sizeof is safe for built-in types; other unmanaged types need an unsafe context
+int intSize = sizeof(int);          // 4, no unsafe needed
 unsafe
 {
-    Console.WriteLine($"Size of int: {sizeof(int)} bytes");
-    Console.WriteLine($"Size of double: {sizeof(double)} bytes");
+    int pointSize = sizeof(Point);  // User-defined struct: unsafe required
 }
 ```
+
+**C# 15 preview:** the memory-safety work starts moving the `unsafe` requirement from *having* a pointer to *dereferencing* it. With `<LangVersion>preview</LangVersion>`, declaring a pointer, taking an address with `&`, `fixed`, and `sizeof` on any unmanaged type no longer need an `unsafe` block. Reading or writing through the pointer still does. A new `unsafe(expression)` form gives a single expression an unsafe context where a block can't appear, such as a field initializer.
 
 ## Yield statement
 
@@ -733,6 +833,8 @@ public IEnumerable<T> Where<T>(IEnumerable<T> source, Func<T, bool> predicate)
 - [Selection statements - if, if-else, and switch (Microsoft Docs)](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/statements/selection-statements)
 - [Iteration statements (Microsoft Docs)](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/statements/iteration-statements)
 - [Lock statement (Microsoft Docs)](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/statements/lock)
+- [System.Threading.Lock (Microsoft Docs)](https://learn.microsoft.com/en-us/dotnet/api/system.threading.lock)
+- [Jump statements, including labeled break and continue (Microsoft Docs)](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/statements/jump-statements)
 - [Using statement (Microsoft Docs)](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/statements/using)
 - [Unsafe keyword (Microsoft Docs)](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/unsafe)
 - [Yield (Microsoft Docs)](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/statements/yield)
@@ -816,6 +918,10 @@ public double CalculateDistance(in Point p1, in Point p2)
     return Math.Sqrt(Math.Pow(p2.X - p1.X, 2) + Math.Pow(p2.Y - p1.Y, 2));
 }
 
+// Ref readonly parameters (C# 12+) - pass by reference, callee can't modify,
+// and unlike 'in' the caller is expected to pass a variable (warning otherwise)
+public double Length(ref readonly Vector3 v) => Math.Sqrt(v.X * v.X + v.Y * v.Y + v.Z * v.Z);
+
 // Params array (variable number of arguments)
 public int Sum(params int[] numbers)
 {
@@ -827,6 +933,20 @@ public int Sum(params int[] numbers)
     return total;
 }
 // Usage: Sum(1, 2, 3, 4, 5);
+
+// Params collections (C# 13+) - params works with spans, IEnumerable<T>, List<T>, etc.
+// ReadOnlySpan<T> avoids the array allocation on every call
+public int Sum(params ReadOnlySpan<int> numbers)
+{
+    int total = 0;
+    foreach (int number in numbers)
+    {
+        total += number;
+    }
+    return total;
+}
+
+public void Log(params IEnumerable<string> messages) { /* ... */ }
 ```
 
 ## Local functions (C# 7.0+)
@@ -875,6 +995,60 @@ bool isEmpty = text.IsNullOrEmpty(); // false
 string truncated = text.Truncate(5); // "Hello"
 ```
 
+## Extension members (C# 14+)
+
+C# 14 adds `extension` blocks. Besides methods, you can now declare extension **properties**, **static** members, and **operators** for a type you don't own. The old `this` parameter syntax still works and compiles to the same IL, so existing extension methods can be moved into a block without a breaking change.
+
+```csharp
+// Still a top-level, non-generic static class
+public static class EnumerableExtensions
+{
+    // Extension block: 'source' is the receiver, in scope for every instance member
+    extension<T>(IEnumerable<T> source)
+    {
+        // Extension property
+        public bool IsEmpty => !source.Any();
+
+        // Extension method (same as the old 'this' form)
+        public IEnumerable<T> WhereNotNull() => source.Where(x => x is not null);
+
+        // Type parameters that belong to the member, not the receiver, go on the member
+        public IEnumerable<TResult> MapTo<TResult>(Func<T, TResult> map) => source.Select(map);
+    }
+
+    // Receiver type only (no name): members act as static members of the type
+    extension<T>(IEnumerable<T>)
+    {
+        public static IEnumerable<T> Identity => Enumerable.Empty<T>();
+
+        public static IEnumerable<T> Combine(IEnumerable<T> a, IEnumerable<T> b) => a.Concat(b);
+
+        // User-defined operator as an extension
+        public static IEnumerable<T> operator +(IEnumerable<T> left, IEnumerable<T> right) => left.Concat(right);
+    }
+}
+
+// Usage
+IEnumerable<int> numbers = [1, 2, 3];
+bool empty = numbers.IsEmpty;                      // Extension property
+var doubled = numbers.MapTo(n => n * 2);
+var none = IEnumerable<int>.Identity;              // Static extension property
+IEnumerable<int> more = [4, 5];
+var both = numbers + more;                         // Extension operator
+
+// Extension indexers (C# 15 preview) - the block must name the receiver
+public static class SequenceIndexer
+{
+    extension(IEnumerable<int> sequence)
+    {
+        public int this[int index] => sequence.ElementAt(index);
+    }
+}
+int third = Enumerable.Range(1, 10)[2]; // 3
+```
+
+Rules to remember: an extension block does not create a scope, so all members in the containing static class need unique signatures. A type parameter goes either on the `extension` declaration or on the member, never both.
+
 ## Lambda expressions
 
 Lambda expressions provide a concise way to create anonymous functions, especially useful for LINQ queries, event handlers, and functional programming patterns.
@@ -913,6 +1087,20 @@ Func<int, int, int> add = (x, y = 10) => x + y;
 int result = add(5); // 15
 ```
 
+### Parameter modifiers without types (C# 14)
+
+`ref`, `in`, `out`, `scoped`, and `ref readonly` can be applied to lambda parameters without spelling out the parameter types. Only `params` still needs an explicitly typed list.
+
+```csharp
+delegate bool TryParse<T>(string text, out T result);
+
+// Before C# 14 you had to type every parameter to use a modifier
+TryParse<int> parseOld = (string text, out int result) => int.TryParse(text, out result);
+
+// C# 14
+TryParse<int> parse = (text, out result) => int.TryParse(text, out result);
+```
+
 ## Method overloading
 
 Method overloading allows multiple methods with the same name but different parameter lists, providing flexibility in how a method can be called.
@@ -941,6 +1129,7 @@ public void Display(int value, string format)
 - [Expression-bodied members (Microsoft Docs)](https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/statements-expressions-operators/expression-bodied-members)
 - [Method parameters (Microsoft Docs)](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/method-parameters)
 - [Extension methods (Microsoft Docs)](https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/extension-methods)
+- [Extension declaration, C# 14 (Microsoft Docs)](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/extension)
 - [Lambda expressions (Microsoft Docs)](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/operators/lambda-expressions)
 
 <div id="delegates-and-events"></div>
@@ -958,15 +1147,17 @@ public int Multiply(int a, int b) => a * b;
 // Usage
 Operation op = Add;
 int result = op(3, 4); // 7
-op += Multiply; // Multicast delegate
+op += Multiply;        // Multicast delegate: both methods run
+int last = op(3, 4);   // 12 - a multicast delegate returns the result of the last method
+op -= Add;             // Unsubscribe
 ```
 
 **Events** are built on delegates and provide a way for classes to notify subscribers when something happens. Events are typically used in GUI applications and other scenarios where you want to decouple the event source from the event handler.
 
-```csharp:
+```csharp
 public class Button
 {
-    public event EventHandler Clicked;
+    public event EventHandler? Clicked;
 
     protected virtual void OnClicked() =>
         Clicked?.Invoke(this, EventArgs.Empty);
@@ -1059,7 +1250,7 @@ bool isValid = Person.IsValidAge(20);
 
 Structs are value types and are suitable for small, immutable data structures.
 
-Note that you cannot give initial values to a struct unless you make it static or const.
+Since C# 10, structs can have field and property initializers and an explicit parameterless constructor. Before that, initializers were only allowed on `static` or `const` members. Note that `default(Point)` still bypasses every initializer and constructor, so don't rely on them for invariants.
 
 ```csharp
 // Basic struct definition
@@ -1089,6 +1280,15 @@ public struct Point
 // Usage
 Point point = new Point(3, 4);
 double distance = point.DistanceFromOrigin(); // 5
+
+// Readonly struct (C# 7.2+) - the compiler enforces immutability and avoids
+// defensive copies when the struct is passed by 'in' or 'ref readonly'
+public readonly struct Money(decimal amount, string currency)
+{
+    public decimal Amount { get; } = amount;
+    public string Currency { get; } = currency;
+    public override string ToString() => $"{Amount} {Currency}";
+}
 ```
 
 ## Records (C# 9.0+)
@@ -1126,10 +1326,13 @@ public record Employee
 Record structs combine the value semantics of structs with the special features of records.
 
 ```csharp
-// Record struct
+// Record struct - positional properties are get/set (mutable) by default
 public record struct Point(double X, double Y);
 
-// Mutable record struct
+// Readonly record struct - positional properties become get/init, the usual choice
+public readonly record struct ImmutablePoint(double X, double Y);
+
+// Mutable record struct with explicit members
 public record struct MutablePoint
 {
     public double X { get; set; }
@@ -1171,7 +1374,7 @@ public class Circle : IShape
         Console.WriteLine("Drawing a circle");
     }
     
-    // Override default implementation
+    // Provide your own implementation instead of the interface default
     public string GetDescription() => $"Circle with radius {Radius}";
 }
 ```
@@ -1331,7 +1534,7 @@ nullableString ??= "Default";
 
 Generics let you define type-safe, reusable classes, methods, and interfaces. They improve code reuse, type safety, and performance by avoiding boxing/unboxing overhead.
 
-**Generic class**:
+## Generic classes
 
 ```csharp
 public class Repository<T>
@@ -1348,28 +1551,73 @@ intRepo.Add(42);
 int number = intRepo.Get(0);
 ```
 
-**Generic methods**:
+## Generic methods
 
 ```csharp
 public T Echo<T>(T input) => input;
 
-// Usage
+// Usage - the type argument is usually inferred
 string message = Echo("Hello");
 int number = Echo(123);
 ```
 
-**Constraints (limit generic types)**:
+## Constraints
+
+Constraints limit which types can be used as type arguments, and in return let you call members of the constraint inside the generic code.
 
 ```csharp
 public class EmployeeRepository<T> where T : Employee, new()
 {
     public T Create() => new T();
 }
+
+// Available constraints
+where T : struct            // Non-nullable value type
+where T : class             // Reference type (class? allows nullable)
+where T : notnull           // Non-nullable type, value or reference (C# 8+)
+where T : unmanaged         // Unmanaged value type, usable with pointers (C# 7.3+)
+where T : new()             // Has a public parameterless constructor (must be last)
+where T : BaseClass         // Derives from BaseClass
+where T : IInterface        // Implements IInterface
+where T : U                 // T derives from another type parameter U
+where T : allows ref struct // T may be a ref struct such as Span<T> (C# 13+)
+
+// Multiple constraints on multiple type parameters
+public TResult Convert<TSource, TResult>(TSource value)
+    where TSource : notnull
+    where TResult : class, new()
+{ /* ... */ }
+```
+
+## Static abstract members and generic math (C# 11+)
+
+Interfaces can declare `static abstract` and `static virtual` members. This lets a generic method call static members such as operators on `T`, which powers the generic math interfaces in `System.Numerics` (`INumber<T>`, `IAdditionOperators<T,T,T>`, and others).
+
+```csharp
+using System.Numerics;
+
+// Works for int, double, decimal, BigInteger, or any type implementing INumber<T>
+public static T Sum<T>(IEnumerable<T> values) where T : INumber<T>
+{
+    T total = T.Zero;                 // Static member accessed through the type parameter
+    foreach (T value in values)
+        total += value;
+    return total;
+}
+
+// Your own interface with a static abstract member
+public interface IShape<TSelf> where TSelf : IShape<TSelf>
+{
+    static abstract TSelf CreateDefault();
+    static abstract TSelf operator *(TSelf shape, double scale);
+}
 ```
 
 **Additional resources**:
 
 - [Generics (Microsoft Docs)](https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/types/generics)
+- [Constraints on type parameters (Microsoft Docs)](https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/generics/constraints-on-type-parameters)
+- [Generic math (Microsoft Docs)](https://learn.microsoft.com/en-us/dotnet/standard/generics/math)
 
 <div id="classes-and-inheritance"></div>
 
@@ -1445,7 +1693,7 @@ public class Person(string name, int age)
     public int Age { get; } = age;
     
     // Can use constructor parameters directly in methods
-    public string Introduce() => $"My name is {name} and I'm {age} years old";
+    public virtual string Introduce() => $"My name is {name} and I'm {age} years old";
     
     // Can still have additional constructors
     public Person(string name) : this(name, 0)
@@ -1467,6 +1715,8 @@ public class Employee(string name, int age, string department) : Person(name, ag
 var alice = new Person("Alice", 30);
 var bob = new Employee("Bob", 25, "Engineering");
 ```
+
+Primary constructor parameters are not fields. If a member reads one, the compiler captures it in a hidden field, so assign it to a property or field when you need a stable, discoverable member. On `record` types the parameters become public properties instead.
 
 ## Inheritance
 
@@ -1627,6 +1877,57 @@ if (animals[0] is Dog dog)
 Dog anotherDog = (Dog)animals[0];
 ```
 
+## Operator overloading
+
+Types can define how built-in operators behave on them. Operators are `public static` and usually come in pairs (`==` with `!=`, `<` with `>`). C# 14 adds **instance** compound assignment and increment operators, which let you mutate in place instead of allocating a new value for `a += b`.
+
+```csharp
+public struct Vector2(double x, double y)
+{
+    public double X { get; set; } = x;
+    public double Y { get; set; } = y;
+
+    // Binary operator (static, returns a new value)
+    public static Vector2 operator +(Vector2 a, Vector2 b) => new(a.X + b.X, a.Y + b.Y);
+    public static Vector2 operator *(Vector2 v, double k) => new(v.X * k, v.Y * k);
+
+    // Unary operator
+    public static Vector2 operator -(Vector2 v) => new(-v.X, -v.Y);
+
+    // Comparison operators must be declared in pairs
+    public static bool operator ==(Vector2 a, Vector2 b) => a.X == b.X && a.Y == b.Y;
+    public static bool operator !=(Vector2 a, Vector2 b) => !(a == b);
+    public override bool Equals(object? obj) => obj is Vector2 v && this == v;
+    public override int GetHashCode() => HashCode.Combine(X, Y);
+
+    // User-defined compound assignment (C# 14+): mutates 'this', returns void
+    // Used for 'v += other' when the target is a variable; falls back to '+' otherwise
+    public void operator +=(Vector2 other)
+    {
+        X += other.X;
+        Y += other.Y;
+    }
+
+    // Instance increment (C# 14+)
+    public void operator ++()
+    {
+        X++;
+        Y++;
+    }
+
+    // Implicit and explicit conversions
+    public static implicit operator Vector2((double X, double Y) t) => new(t.X, t.Y);
+    public static explicit operator double(Vector2 v) => Math.Sqrt(v.X * v.X + v.Y * v.Y);
+}
+
+// Usage
+Vector2 a = (1, 2);          // Implicit conversion from tuple
+Vector2 b = new(3, 4);
+Vector2 sum = a + b;         // (4, 6)
+a += b;                      // Calls the instance operator +=, no new value allocated
+double length = (double)b;   // 5
+```
+
 When designing class hierarchies, consider these guidelines:
 - Use inheritance when there is a true "is-a" relationship between classes
 - Prefer composition over inheritance for "has-a" relationships
@@ -1640,6 +1941,7 @@ When designing class hierarchies, consider these guidelines:
 - [Inheritance (Microsoft Docs)](https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/object-oriented/inheritance)
 - [Abstract classes and methods (Microsoft Docs)](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/abstract)
 - [Primary constructors (Microsoft Docs)](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/proposals/csharp-12.0/primary-constructors)
+- [Operator overloading (Microsoft Docs)](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/operators/operator-overloading)
 - [C# object-oriented programming best practices (Microsoft Learn)](https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/object-oriented-programming)
 
 
@@ -1658,19 +1960,48 @@ Collection expressions are a concise way to initialize collections, introduced i
 int[] numbers = [1, 2, 3, 4, 5];                   // Array
 List<string> names = ["Alice", "Bob", "Charlie"];  // List
 HashSet<char> letters = ['a', 'b', 'c'];           // HashSet
-Dictionary<string, int> ages = [                   // Dictionary
-    "Alice" => 30,
-    "Bob" => 25,
-    "Charlie" => 35
-];
+Span<int> span = [1, 2, 3];                        // Span (stack-allocated when possible)
+ReadOnlySpan<byte> bytes = [0x01, 0x02];
+IEnumerable<int> sequence = [1, 2, 3];             // Interfaces work too
+int[] empty = [];                                  // Empty collection
+
+// Any type with a collection initializer (Add method) or a [CollectionBuilder] attribute works.
+// Dictionaries are not a target yet: the key => value form is still a proposal, so use
+// a collection initializer for Dictionary<TKey, TValue>.
 
 // Spread operator - combining collections
 int[] moreNumbers = [0, .. numbers, 6];     // [0, 1, 2, 3, 4, 5, 6]
-string[] firstThree = [.. names[0..3]];     // ["Alice", "Bob", "Charlie"]
+string[] firstTwo = [.. names.Take(2)];     // ["Alice", "Bob"]
+int[] copy = [.. numbers];                  // Shallow copy
 
-// Pattern matching with collection expressions
+// Collection expression arguments (C# 15 preview)
+// 'with(...)' must be the first element and passes constructor arguments.
+// Not available for arrays or spans.
+List<string> sized = [with(capacity: 100), .. names];
+HashSet<string> ignoreCase = [with(StringComparer.OrdinalIgnoreCase), "Hello", "HELLO"]; // 1 item
+```
+
+Collection expressions pair with **list patterns** for matching (see [List patterns](#list-patterns-c-110)):
+
+```csharp
 bool IsValidPoint(int[] point) => point is [var x, var y] && x >= 0 && y >= 0;
 ```
+
+### First-class spans (C# 14+)
+
+C# 14 adds implicit conversions between arrays, `Span<T>`, and `ReadOnlySpan<T>`, and lets span types act as extension method receivers and take part in generic type inference. In practice this means fewer `.AsSpan()` calls and many LINQ-style helpers working on spans without an allocation.
+
+```csharp
+int[] data = [3, 1, 2];
+ReadOnlySpan<int> view = data;           // Array to ReadOnlySpan<T>, no copy
+Span<int> writable = data;               // Array to Span<T>
+ReadOnlySpan<int> readOnly = writable;   // Span<T> to ReadOnlySpan<T>
+
+// Extension methods declared on spans now bind to arrays directly
+int position = data.IndexOf(2);          // MemoryExtensions.IndexOf; before C# 14 this needed data.AsSpan()
+```
+
+Because the span conversions are now part of overload resolution, a call that used to pick a LINQ overload can bind to a `MemoryExtensions` overload instead. The behavior is the same in almost every case, but check the breaking-changes list when upgrading a library to C# 14.
 
 ## Arrays
 
@@ -1708,6 +2039,45 @@ Array.Sort(numbers);                              // Sort array in-place
 Array.Reverse(numbers);                           // Reverse array in-place
 int index = Array.IndexOf(names, "Bob");          // Find index of element
 bool exists = Array.Exists(numbers, n => n > 10); // Check if condition exists
+```
+
+## Indices and ranges (C# 8.0+)
+
+The `^` operator counts from the end and the `..` operator slices. They work on arrays, strings, `Span<T>`, and any type with an `int Length`/`Count` and a `Slice(int, int)` method. `List<T>` supports `^` but not ranges, since it has no `Slice` method.
+
+```csharp
+int[] numbers = [10, 20, 30, 40, 50];
+
+int last = numbers[^1];            // 50  (^1 is the last element, ^0 is one past the end)
+int secondLast = numbers[^2];      // 40
+
+int[] firstTwo = numbers[..2];     // [10, 20]  (end is exclusive)
+int[] lastTwo = numbers[^2..];     // [40, 50]
+int[] middle = numbers[1..^1];     // [20, 30, 40]
+int[] all = numbers[..];           // Copy of the whole array
+
+// Index and Range are real types you can store and pass around
+Index lastIndex = ^1;
+Range firstHalf = ..(numbers.Length / 2);
+int[] half = numbers[firstHalf];
+
+string word = "cheatsheet";
+string tail = word[^5..];          // "sheet"
+
+// Implicit index access in object initializers (C# 13+)
+public class TimerRemaining
+{
+    public int[] Buffer { get; set; } = new int[10];
+}
+
+var countdown = new TimerRemaining
+{
+    Buffer =
+    {
+        [^1] = 0,                  // Last slot
+        [^2] = 1
+    }
+};
 ```
 
 ## Lists
@@ -1917,11 +2287,48 @@ var queryResult = from n in numbers
                   select n * 2;
 ```
 
+### Newer LINQ operators (.NET 6 to .NET 10)
+
+These ship with the runtime, so what you can use depends on the target framework, not the C# version.
+
+```csharp
+var people = new List<Person> { /* ... */ };
+var orders = new List<Order> { /* ... */ };
+
+// .NET 6: Chunk, MinBy / MaxBy, DistinctBy, ExceptBy, IntersectBy, UnionBy, TryGetNonEnumeratedCount
+var pages = numbers.Chunk(3);                                  // [[1,2,3],[4,5,6],...]
+var oldest = people.MaxBy(p => p.Age);                         // The Person, not the age
+var uniqueByName = people.DistinctBy(p => p.Name);
+
+// .NET 7: Order / OrderDescending for sequences that are their own key
+var sorted = numbers.Order();                                  // Same as OrderBy(n => n)
+
+// .NET 9: CountBy, AggregateBy, Index
+var wordCounts = words.CountBy(w => w);                        // KeyValuePair<string, int> per key
+var scoreByCategory = items.AggregateBy(
+    keySelector: i => i.Category,
+    seed: 0,
+    func: (total, i) => total + i.Score);
+foreach (var (index, person) in people.Index())                // (int Index, T Item) tuples
+    Console.WriteLine($"{index}: {person.Name}");
+
+// .NET 10: LeftJoin / RightJoin, Shuffle, Sequence, InfiniteSequence
+var withOrders = people.LeftJoin(orders,                       // Every person, order may be null
+    p => p.Id,
+    o => o.CustomerId,
+    (p, o) => new { p.Name, Total = o?.Total ?? 0m });
+var randomOrder = numbers.Shuffle();                           // Uniformly shuffled sequence
+var evens = Enumerable.Sequence(0, 100, step: 2);              // 0, 2, 4, ... 100 (inclusive)
+var ids = Enumerable.InfiniteSequence(1, 1).Take(5);           // 1, 2, 3, 4, 5 (start, step)
+```
+
 **Additional resources:**
 
 - [Collections overview (Microsoft Docs)](https://learn.microsoft.com/en-us/dotnet/standard/collections/)
 - [Collection expressions (Microsoft Docs)](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/operators/collection-expressions)
+- [Indices and ranges (Microsoft Docs)](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/operators/member-access-operators#indices-and-ranges)
 - [LINQ (Microsoft Docs)](https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/linq/)
+- [System.Linq.Enumerable API, including LeftJoin, Shuffle, CountBy (Microsoft Docs)](https://learn.microsoft.com/en-us/dotnet/api/system.linq.enumerable)
 - [IEnumerable and IQueryable](https://dotnettutorials.net/lesson/differences-between-ienumerable-and-iqueryable/)
 - [Choosing a collection type (Microsoft Docs)](https://learn.microsoft.com/en-us/dotnet/standard/collections/selecting-a-collection-class)
 - [System.Collections.Generic Namespace (Microsoft Docs)](https://learn.microsoft.com/en-us/dotnet/api/system.collections.generic)
@@ -2064,6 +2471,42 @@ string GetSign(int number) => number switch
 (string, int) person = ("Alice", 30);
 var (name, _) = person; // Discard the age
 ```
+
+## Closed hierarchies and union types (C# 15 preview)
+
+Two C# 15 features make `switch` exhaustive without a `_` fallback arm. A **closed** class fixes the set of direct descendants at compile time (they must live in the same assembly), so the compiler knows when every case is covered. A **union** declares a type whose value is exactly one of several case types.
+
+```csharp
+// Closed hierarchy: 'closed' implies abstract; derived types must be in this assembly
+public closed record class Shape;
+public record class Circle(double Radius) : Shape;
+public record class Square(double Side) : Shape;
+
+double Area(Shape shape) => shape switch
+{
+    Circle(var r) => Math.PI * r * r,
+    Square(var s) => s * s,
+    // No warning and no default arm: the compiler knows these are all the cases
+};
+
+// Union type: a value that is a Cat, a Dog, or a Bird
+public record class Cat(string Name);
+public record class Dog(string Name);
+public record class Bird(string Name);
+
+public union Pet(Cat, Dog, Bird);
+
+Pet pet = new Dog("Rex");            // Implicit conversion from each case type
+
+string name = pet switch
+{
+    Dog d => d.Name,
+    Cat c => c.Name,
+    Bird b => b.Name,                // Exhaustive: adding a case type breaks this switch
+};
+```
+
+Closedness is not transitive. A non-closed descendant of a closed class can still be subclassed elsewhere, so mark intermediate classes `closed` too if you want exhaustiveness all the way down. The runtime support types for unions (`UnionAttribute`, `IUnion`) arrive with .NET 11, and parts of the union proposal are still being implemented.
 
 <div id="exceptions"></div>
 
@@ -2215,22 +2658,10 @@ public class CustomerNotFoundException : Exception
     {
         CustomerId = customerId;
     }
-    
-    // For serialization support (important for distributed applications)
-    protected CustomerNotFoundException(System.Runtime.Serialization.SerializationInfo info,
-        System.Runtime.Serialization.StreamingContext context) : base(info, context)
-    {
-        CustomerId = info.GetInt32(nameof(CustomerId));
-    }
-    
-    // Override GetObjectData for proper serialization
-    public override void GetObjectData(System.Runtime.Serialization.SerializationInfo info,
-        System.Runtime.Serialization.StreamingContext context)
-    {
-        base.GetObjectData(info, context);
-        info.AddValue(nameof(CustomerId), CustomerId);
-    }
 }
+
+// Note: the old serialization constructor and GetObjectData override are obsolete since .NET 8
+// (warning SYSLIB0051). BinaryFormatter is removed in .NET 9, so don't add them to new exceptions.
 
 // Usage
 void ProcessCustomer(int customerId)
@@ -2376,13 +2807,29 @@ public async Task<string> GetFastestResponseAsync()
     // Get the result from the completed task
     return await completedTask;
 }
+
+// Task.WhenEach (.NET 9+) - process tasks in the order they finish
+public async Task ProcessAsTheyCompleteAsync(IEnumerable<string> urls)
+{
+    List<Task<string>> downloads = urls.Select(DownloadDataAsync).ToList();
+
+    await foreach (Task<string> finished in Task.WhenEach(downloads))
+    {
+        string result = await finished;   // Already completed, so this just unwraps or throws
+        Console.WriteLine($"Got {result.Length} bytes");
+    }
+}
+
+// Task.WaitAsync (.NET 6+) - add a timeout or cancellation to any task
+string data = await DownloadDataAsync(url).WaitAsync(TimeSpan.FromSeconds(5));
 ```
 
 When to use different task composition methods:
 1. **Task.WhenAll**: Use when you need the results of all operations and they can run concurrently
 2. **Task.WhenAny**: Use for implementing timeouts, racing operations, or taking the first available result
-3. **Task.Run**: Use for CPU-bound work that needs to be offloaded from the current thread
-4. **Task.Delay**: Use for implementing timeouts or periodic operations in async methods
+3. **Task.WhenEach**: Use when you want to handle each result as soon as it is ready, instead of looping over `WhenAny`
+4. **Task.Run**: Use for CPU-bound work that needs to be offloaded from the current thread
+5. **Task.Delay**: Use for implementing timeouts or periodic operations in async methods
 
 ## Exception handling in async code
 
@@ -2695,9 +3142,9 @@ file static class StringExtensions  // Only visible in this file
 }
 ```
 
-## Partial classes
+## Partial classes and members
 
-Partial classes allow splitting a class, struct, or interface definition across multiple files. This can be useful for separating generated code from hand-written code or dividing large classes by functionality.
+Partial classes allow splitting a class, struct, or interface definition across multiple files. This can be useful for separating generated code from hand-written code or dividing large classes by functionality. Partial **members** let a source generator fill in an implementation you only declared: methods since C# 3, properties and indexers since C# 13, constructors and events since C# 14.
 
 ```csharp
 // File: Customer.cs
@@ -2731,6 +3178,43 @@ public partial class Customer
         // Validation logic
         return !string.IsNullOrEmpty(Name);
     }
+}
+
+// Partial members: one defining declaration, one implementing declaration
+// File: Settings.cs (hand-written)
+public partial class Settings
+{
+    public partial string ConnectionString { get; set; }   // Partial property (C# 13+)
+    public partial Settings(string path);                   // Partial constructor (C# 14+)
+    public partial event EventHandler? Changed;             // Partial event (C# 14+)
+    private partial void OnLoaded();                        // Partial method
+}
+
+// File: Settings.g.cs (typically generated)
+public partial class Settings
+{
+    private string _connectionString = "";
+    public partial string ConnectionString
+    {
+        get => _connectionString;
+        set => _connectionString = value ?? throw new ArgumentNullException(nameof(value));
+    }
+
+    // Only the implementing declaration may include a this(...) or base(...) initializer
+    public partial Settings(string path)
+    {
+        ConnectionString = File.ReadAllText(path);
+    }
+
+    // The implementing declaration of an event must have add and remove
+    public partial event EventHandler? Changed
+    {
+        add => _changed += value;
+        remove => _changed -= value;
+    }
+    private EventHandler? _changed;
+
+    private partial void OnLoaded() { /* ... */ }
 }
 ```
 
@@ -2770,13 +3254,26 @@ public class PropertyDemo
     // Auto-implemented property
     public string Name { get; set; }
     
-    // Property with backing field
+    // Property with an explicit backing field
     private int _age;
     public int Age
     {
         get { return _age; }
         set { _age = value < 0 ? 0 : value; }
     }
+
+    // The field keyword (C# 14+) - same thing without declaring the backing field.
+    // 'field' refers to the compiler-generated backing field and is only valid inside accessors.
+    public int Hours
+    {
+        get;
+        set => field = value >= 0 ? value : 0;
+    }
+
+    // Lazy initialization with field
+    public string DisplayName => field ??= ComputeDisplayName();
+
+    // If the type already has a member named 'field', use @field or this.field to reach it
     
     // Expression-bodied property (C# 6.0+)
     public bool IsAdult => Age >= 18;
@@ -2811,12 +3308,77 @@ public class PropertyDemo
 }
 ```
 
+## File-based apps (.NET 10)
+
+Since .NET 10 a single `.cs` file can be a complete application. Run it with `dotnet run app.cs`, no project file needed. `#:` directives at the top of the file replace the settings you would otherwise put in a `.csproj`, and C# 14 recognizes them as preprocessor directives. When the script outgrows one file, `dotnet project convert app.cs` turns it into a regular project.
+
+```csharp
+#!/usr/bin/env -S dotnet --
+#:package Spectre.Console@0.49.1          // NuGet package reference (version optional)
+#:sdk Microsoft.NET.Sdk.Web               // Use a different SDK, e.g. for a minimal API
+#:property TargetFramework=net10.0        // Any MSBuild property
+#:property PublishAot=true
+#:project ../Shared/Shared.csproj         // Reference another project
+
+using Spectre.Console;
+
+AnsiConsole.MarkupLine("[green]Hello from a file-based app[/]");
+```
+
+```bash
+dotnet run app.cs            # Build and run
+chmod +x app.cs && ./app.cs  # Run directly on Linux/macOS via the shebang line
+dotnet project convert app.cs
+```
+
 **Additional resources:**
 
 - [C# coding conventions (Microsoft Docs)](https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/coding-conventions)
 - [File-scoped namespaces (Microsoft Docs)](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/proposals/csharp-10.0/file-scoped-namespaces)
 - [Access modifiers (Microsoft Docs)](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/access-modifiers)
 - [Properties (Microsoft Docs)](https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/properties)
+- [The field keyword (Microsoft Docs)](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/field)
+- [Partial members (Microsoft Docs)](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/partial-member)
+- [File-based apps (Microsoft Docs)](https://learn.microsoft.com/en-us/dotnet/core/sdk/file-based-apps)
+
+<div id="whats-new-in-c-14-and-c-15"></div>
+
+# What's new in C# 14 and C# 15
+
+A quick index of the newest language features, with links to where each one is covered in this sheet.
+
+**C# 14 (.NET 10, released November 2025)**
+
+| Feature | One-liner | Covered in |
+|---|---|---|
+| Extension members | `extension(T receiver) { ... }` blocks with extension properties, static members, and operators | [Extension members](#extension-members-c-14) |
+| `field` keyword | Access the auto-generated backing field inside a property accessor | [Properties and indexers](#properties-and-indexers) |
+| Null-conditional assignment | `customer?.Order = value;` and `?.` with compound assignment | [Control flow](#control-flow) |
+| `nameof` unbound generics | `nameof(List<>)` evaluates to `"List"` | [Basic types and literals](#basic-types-and-literals) |
+| First-class spans | Implicit conversions among `T[]`, `Span<T>`, `ReadOnlySpan<T>`; spans as extension receivers | [Collection expressions](#collection-expressions-c-12) |
+| Lambda parameter modifiers | `(text, out result) => ...` without parameter types | [Lambda expressions](#lambda-expressions) |
+| Partial constructors and events | Complete the partial member story for source generators | [Partial classes and members](#partial-classes-and-members) |
+| User-defined compound assignment | Instance `operator +=` and `operator ++` that mutate in place | [Operator overloading](#operator-overloading) |
+| File-based app directives | `#:package`, `#:sdk`, `#:property`, `#:project` | [File-based apps](#file-based-apps-net-10) |
+
+**C# 15 (preview, .NET 11 due November 2026)**
+
+| Feature | One-liner | Covered in |
+|---|---|---|
+| Union types | `public union Pet(Cat, Dog, Bird);` with exhaustive `switch` | [Closed hierarchies and union types](#closed-hierarchies-and-union-types-c-15-preview) |
+| Closed hierarchies | `closed` classes with a fixed set of subclasses per assembly | [Closed hierarchies and union types](#closed-hierarchies-and-union-types-c-15-preview) |
+| Extension indexers | `this[int i]` inside an `extension` block | [Extension members](#extension-members-c-14) |
+| Labeled `break` and `continue` | `break outer;` from a nested loop | [Loops](#loops) |
+| Collection expression arguments | `[with(capacity: 10), .. items]` | [Collection expressions](#collection-expressions-c-12) |
+| Memory safety, step one | Pointers and `fixed` without `unsafe`; `unsafe(expr)` | [Unsafe code](#unsafe-code) |
+
+**Additional resources:**
+
+- [What's new in C# 14 (Microsoft Docs)](https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-14)
+- [What's new in C# 15 (Microsoft Docs)](https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-15)
+- [What's new in C# 13 (Microsoft Docs)](https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-13)
+- [C# language feature status (Roslyn)](https://github.com/dotnet/roslyn/blob/main/docs/Language%20Feature%20Status.md)
+- [.NET support policy](https://dotnet.microsoft.com/platform/support/policy/dotnet-core)
 
 <div id="end-of-document"></div>
 
